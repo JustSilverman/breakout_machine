@@ -16,6 +16,7 @@ gem 'delayed_job_active_record'
 
 
 group :development, :test do
+  gem 'sqlite3', '1.3.5'
   gem 'rspec-rails'
   gem 'shoulda-matchers'
   gem 'guard-rspec', '1.2.1'
