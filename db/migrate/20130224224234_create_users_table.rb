@@ -1,7 +1,13 @@
 class CreateUsersTable < ActiveRecord::Migration
-  def up
-  end
+  def change
+    create_table :users do |t|
+      t.string  :first_name, :null => false
+      t.string  :last_name, :null => false
+      t.string  :email, :null => false
+      t.string  :password_digest
+      t.integer :open_votes
 
-  def down
+      t.timestamps
+    end
   end
 end
