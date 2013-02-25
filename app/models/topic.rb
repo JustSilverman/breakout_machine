@@ -1,13 +1,18 @@
 class Topic < ActiveRecord::Base
   attr_accessible :title
-  has_many :votes
-  has_many :users, :through => votes
 
-  def complete?
-    self.complete
+  has_many :votes
+  has_many :users, :through => :votes
+
+  validates :title, :presence => true
+
+  before_create { self.completed = 0 }
+
+  def completed?
+    self.completed
   end
 
-  def completed!
-    self.update_attributes(:completed => true)
+  def complete!
+    self.update_attribute(:completed, true)
   end
 end
