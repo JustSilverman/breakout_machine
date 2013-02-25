@@ -12,6 +12,9 @@ describe Topic do
   it { should respond_to(:completed) }
   it { should respond_to(:completed?) }
   it { should respond_to(:complete!) }
+  it { should respond_to(:count) }
+  it { should respond_to(:upvote) }
+  it { should respond_to(:downvote) }
 
   it { should be_valid }
 
@@ -32,5 +35,4 @@ describe Topic do
       @topic.reload.completed?.should == true
     end
   end
-
 end
