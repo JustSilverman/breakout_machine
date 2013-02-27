@@ -1,11 +1,6 @@
 module SessionsHelper
   def sign_in(user)
-    if params[:remember_me]
-      cookies[:remember_token] = { value:   user.remember_token,
-                                   expires: 3.days.from_now }
-     else
-      cookies[:remember_token] = user.remember_token
-    end
+    cookies[:user_id] = user.id
     self.current_user = user
   end
 
@@ -18,31 +13,15 @@ module SessionsHelper
   end
 
   def current_user
-    @current_user ||= User.find_by_remember_token(cookies[:remember_token])
+    @current_user ||= User.find_by_id(cookies[:user_id])
   end
 
   def current_user?(user)
     user == current_user
   end
 
-  def signed_in_user
-    unless signed_in?
-      store_location
-      redirect_to signin_url, notice: "Please sign in."
-    end
-  end
-
   def sign_out
     self.current_user = nil
-    cookies.delete(:remember_token)
-  end
-
-  def redirect_back_or(default)
-    redirect_to(session[:return_to] || default)
-    session.delete(:return_to)
-  end
-
-  def store_location
-    session[:return_to] = request.url
+    cookies.delete(:user_id)
   end
 end

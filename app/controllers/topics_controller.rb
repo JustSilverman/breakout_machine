@@ -1,23 +1,34 @@
-class TopicsController < ActionController::Base
+class TopicsController < ApplicationController
   def index
     @topics = Topic.all
   end
 
-  def new
-    @topic = Topic.new
-  end
-
   def create
-    @topic = Topic.new(params[:topic])
-    if @topic.save
-      flash.now[:success] = "Congrats #{@topic.title} has been created"
-      redirect_to topics_index_path
-    else
-      render 'index'
-    end
+    @topic = Topic.new(:title => params[:title])
+
+    save_and_render(@topic)
   end
 
-  def show
+  def update
+    redirect_to root_path unless current_user.has_votes?
     @topic = Topic.find(params[:id])
+
+    save_and_render(@topic)
+  end
+
+  def destroy
+    @topic = Topic.find(params[:id])
+    @topic.destroy
+    redirect_to 'index'
+  end
+end
+
+private
+def save_and_render(topic)
+  topic.save
+
+  respond_to do |format|
+    format.html { redirect_to 'index'}
+    format.json { render :json => topic }
   end
 end

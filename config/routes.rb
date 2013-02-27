@@ -1,8 +1,8 @@
 BreakoutMachine::Application.routes.draw do
   root :to => 'topics#index'
 
-  resources :topics,   only: [:new, :create, :index, :edit, 
-                              :update, :destroy, :show]
-  resources :users,     only: [:new, :create, :index, :show]
-  resources :sessions, only: [:new, :create, :destroy]
+  resources :topics,    only: [:create, :index,
+                              :update, :destroy]
+  resources :users,     only: [:create, :index, :destroy]
+  resources :sessions,  only: [:create, :destroy]
 end
