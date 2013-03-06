@@ -13,7 +13,7 @@ module SessionsHelper
   end
 
   def current_user
-    @current_user ||= User.find_by_id(cookies[:user_id])
+    User.find_by_id(cookies[:user_id]) if cookies[:user_id]
   end
 
   def current_user?(user)

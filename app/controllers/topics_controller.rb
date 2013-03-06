@@ -1,19 +1,28 @@
 class TopicsController < ApplicationController
   def index
-    @topics = Topic.all
+    @topics = Topic.sort_by_votes
   end
 
   def create
     @topic = Topic.new(:title => params[:title])
 
-    save_and_render(@topic)
+    if @topic.save
+      render :json => { :topic_row => render_to_string(:_topic_row,
+                                                       :layout => false,
+                                                       :locals => {:topic => @topic })}
+    else
+      render 'index'
+    end
   end
 
   def update
-    redirect_to root_path unless current_user.has_votes?
-    @topic = Topic.find(params[:id])
+    if current_user.has_votes?
+      @topic = Topic.find(params[:id])
+      @topic.vote(params[:dir], current_user.id)
+      @topics = Topic.sort_by_votes
 
-    save_and_render(@topic)
+      render :json => { :table => topics_table_json, :votes => votes_left_json}
+    end
   end
 
   def destroy
@@ -21,14 +30,12 @@ class TopicsController < ApplicationController
     @topic.destroy
     redirect_to 'index'
   end
-end
 
-private
-def save_and_render(topic)
-  topic.save
+  def topics_table_json
+    render_to_string(:_topics_table, :layout => false, :locals => {:topics => @topics })
+  end
 
-  respond_to do |format|
-    format.html { redirect_to 'index'}
-    format.json { render :json => topic }
+  def votes_left_json
+    render_to_string('shared/_open_votes', :layout => false, :locals => {:current_user => current_user})
   end
 end

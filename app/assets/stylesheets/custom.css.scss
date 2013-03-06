@@ -34,8 +34,8 @@ body {
 
 .profile {
   float: right;
-  margin-right: 2em;
-  margin-top: 1em;
+  margin: 0.5em 2em 0.5em 0;
+  text-align: center;
 }
 
 .user-name {
@@ -113,6 +113,7 @@ td.btn-col {
   background-color: #001F2A;
   color: #fff;
   text-decoration: none;
+  cursor: pointer;
 }
 
 .btn:hover {
@@ -125,6 +126,7 @@ td.btn-col {
   text-align: center;
   width: 5em;
   margin-top: 0;
+  cursor: pointer;
 }
 
 .footer {
@@ -161,7 +163,6 @@ td.btn-col {
 
 .small-form {
   display: none;
-  margin-right: 2.5em;
   float: right;
   padding: 0.5em;
   background-color: #6C363C;
@@ -185,6 +186,7 @@ td.btn-col {
   background-color: #001F2A;
   color: #fff;
   text-decoration: none;
+  cursor: pointer;
 }
 
 .small-form h4 {
@@ -224,4 +226,10 @@ td.btn-col {
 
 .inline {
   display: inline;
+}
+
+a.logout {
+  color: #001F2A;
+  text-decoration: none;
+  font-size: 0.65em;
 }

@@ -1,13 +1,12 @@
 class User < ActiveRecord::Base
   VALID_EMAIL_REGEX = /\A[\w+\-.]+@[a-z\d\-.]+\.[a-z]+\z/i
 
-  attr_accessible :first_name, :last_name, :email, :password,
+  attr_accessible :name, :email, :password,
                   :password_confirmation
   has_secure_password
 
   validates_confirmation_of :password
-  validates :first_name, presence: true, length: { maximum: 35 }
-  validates :last_name,  presence: true, length: { maximum: 35 }
+  validates :name, presence: true, length: { maximum: 35 }
 
   validates :email, presence:   true,
                     format:     { with: VALID_EMAIL_REGEX },
@@ -20,11 +19,23 @@ class User < ActiveRecord::Base
 
   before_save {self.email.downcase!}
 
-  def name
-    "#{first_name} #{last_name}"
+  def first_name
+    self.name.split(" ").first
+  end
+
+  def last_name
+    self.name.split(" ").last
   end
 
   def has_votes?
     self.open_votes != 0
+  end
+
+  def decrement_votes
+    self.update_attribute(:open_votes, self.open_votes -= 1)
+  end
+
+  def increment_votes
+    self.update_attribute(:open_votes, self.open_votes += 1)
   end
 end

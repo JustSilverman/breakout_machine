@@ -8,10 +8,7 @@ class SessionsController < ApplicationController
       @message = "Invalid credentials"
     end
 
-    respond_to do |format|
-      format.html
-      format.json  { render :json => {:user => @user, :message => @message} }
-    end
+    render :json => { :profile => render_to_string('shared/_profile', :layout => false) }
   end
 
   def destroy

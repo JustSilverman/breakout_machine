@@ -1,4 +1,7 @@
-<div class="profile">
-  <span class="user-name"><%= "#{current_user.name}" if current_user %></span>
-  <span class="votes-left"><%= "#{current_user.open_votes} votes left today" if current_user %></span>
-</div>
+<% if current_user %>
+  <div class="profile">
+    <span class="user-name"><%= "#{current_user.name}" %></span>
+    <%= render 'shared/open_votes' %>
+    <a class="logout" href="#">(log me out)</a>
+  </div>
+<% end %>

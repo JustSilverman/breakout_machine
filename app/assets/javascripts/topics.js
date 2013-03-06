@@ -1,4 +1,6 @@
 $(document).ready(function(){
+  Topic.load(topics);
+
   $('#login').click(function(e){
     e.preventDefault();
     $('#signup-form').hide();
@@ -11,6 +13,13 @@ $(document).ready(function(){
     $('#signup-form').slideDown();
   });
 
+  $(document).on('click', 'a.logout', function(e){
+    e.preventDefault();
+    $.post('/sessions', {_method: "delete"}).done(function(){
+      $(location).attr('href', "/");
+    });
+  });
+
   $('#show-new-topic').click(function(e){
     e.preventDefault();
     $('#show-new-topic').hide();
@@ -19,74 +28,42 @@ $(document).ready(function(){
 
   $('div#login-form form').submit(function(e){
     e.preventDefault();
+    $('div#login-form').slideUp();
+    $('.nav-link').hide();
 
-    $.ajax({
-      url:  this.action,
-      type: this.method,
-      data: $(this).serialize(),
-      dataType: 'json',
-      success: function(data, status){
-        $('div#login-form').slideUp();
-        $('.nav-link').hide();
-        $('.profile').show();
-        $('.user-name').html(data.user.first_name + data.user.last_name);
-        $('.votes-left').html(data.user.open_votes + " votes left today");
-      }
-    })
+    $.post(this.action, $(this).serialize()).done(function(data, status){
+        $('.top-nav').append(data.profile);
+    });
+  });
+
+  $('div#signup-form form').submit(function(e){
+    e.preventDefault();
+    $('div#signup-form').slideUp();
+    $('.nav-link').hide();
+
+    $.post(this.action, $(this).serialize()).done(function(data, status){
+        $('.top-nav').append(data.profile);
+    });
   });
 
   $('div#new-topic-form form').submit(function(e){
     e.preventDefault();
+    $('div#new-topic-form').hide();
+    $('#show-new-topic').show();
 
-    $.ajax({
-      url:  this.action,
-      type: this.method,
-      data: $(this).serialize(),
-      dataType: 'json',
-      success: function(data, status){
-        $('div#new-topic-form').hide();
-        $('#show-new-topic').show();
-
-        //append new topic to list
-      }
-    })
-  });
-
-  $('.upvote').click(function(e){
-    e.preventDefault();
-    var topicId = $(this).attr('id').split("-")[1];
-
-    $.ajax({
-      url:  "topics/" + topicId,
-      type: "post",
-      data: {_method: 'put', id: topicId},
-      dataType: 'json',
-      success: function(data, status){
-        var newTopicVotes = parseInt($("tr#topic-" + data.id + " td.vote-count").html()) + 1;
-        $("tr#topic-" + data.id + " td.vote-count").html(newTopicVotes + " votes");
-
-        var newUserVotes = parseInt($('.votes-left').html()) - 1;
-        $('.votes-left').html(newUserVotes + " votes left today");
-      }
+    $.post(this.action, $(this).serialize()).done(function(data, status){
+      $('table.topics-table').append(data.topic_row);
+      $('input#title').val("");
     });
   });
 
-    $('.downvote').click(function(e){
+  $(document).on('click', '.vote', function(e){
     e.preventDefault();
-    var topicId = $(this).attr('id').split("-")[1];
-
-      $.ajax({
-        url:  "topics/" + topicId,
-        type: "post",
-        data: {_method: 'put', id: topicId},
-        dataType: 'json',
-        success: function(data, status){
-          var newTopicVotes = parseInt($("tr#topic-" + data.id + " td.vote-count").html()) - 1;
-          $("tr#topic-" + data.id + " td.vote-count").html(newTopicVotes + " votes");
-
-          var newUserVotes = parseInt($('.votes-left').html()) + 1;
-          $('.votes-left').html(newUserVotes + " votes left today");
-        }
-      });
+    var topicId   = $(this).attr('data-dirta-id');
+    var direction = $(this).attr('data-dir');
+    $.post("topics/" + topicId, {_method: 'put', id: topicId, dir: direction}).done(function(data, status){
+      $('div.topic-list-body table').replaceWith($(data.table).hide().fadeIn("slow"));
+      $('.top-nav span.votes-left').replaceWith(data.votes);
     });
+  });
 });

@@ -1,11 +1,7 @@
 class UsersController < ApplicationController
-
   def create
     @user = User.new(params[:user])
-    if @user.save
-    else
-      render 'new'
-    end
+    sign_in @user if @user.save
   end
 
   def index
