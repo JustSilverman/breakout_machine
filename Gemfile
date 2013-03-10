@@ -8,12 +8,12 @@ gem 'faker', '1.0.1'
 gem 'jquery-rails', '2.0.2'
 gem 'jquery-ui-rails'
 gem 'chosen-rails'
-gem 'jquery-qtip2-rails'
 gem 'debugger'
 gem "launchy", "~> 2.1.2"
 gem 'delayed_job_active_record'
 gem 'handlebars-rails', :git => 'git://github.com/kolo/handlebars-rails.git'
 gem "font-awesome-rails"
+gem 'sass-rails',   '3.2.5'
 
 group :development, :test do
   gem 'rspec-rails'
@@ -26,7 +26,6 @@ group :development, :test do
 end
 
 group :assets do
-  gem 'sass-rails',   '3.2.5'
   gem 'coffee-rails', '3.2.2'
   gem 'uglifier', '1.2.3'
 end
