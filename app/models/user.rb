@@ -1,5 +1,7 @@
 class User < ActiveRecord::Base
   VALID_EMAIL_REGEX = /\A[\w+\-.]+@[a-z\d\-.]+\.[a-z]+\z/i
+  has_many :votes
+  has_many :topics, :through => :votes
 
   attr_accessible :name, :email, :password,
                   :password_confirmation
@@ -14,9 +16,6 @@ class User < ActiveRecord::Base
   validates :password, presence: true, length: { minimum: 6 }
   validates :password_confirmation, presence: true
   before_create :default_values
-
-  has_many :votes
-  has_many :topics, :through => :votes
 
   before_save {self.email.downcase!}
 
@@ -40,6 +39,10 @@ class User < ActiveRecord::Base
     self.update_attribute(:open_votes, self.open_votes += 1)
   end
 
+  def refresh_votes
+    self.update_attribute(:open_votes, 3) if last_vote_date > 12.hours.ago
+  end
+
   def to_json
     {name: self.name, open_votes: self.open_votes, topic_ids: self.topic_ids,
      group: self.group}.to_json
@@ -53,5 +56,9 @@ class User < ActiveRecord::Base
   def default_values
     self.open_votes = 3
     self.group = "student"
+  end
+
+  def last_vote_date
+    Vote.where(:user_id => self.id).order("created_at DESC").first.updated_at
   end
 end
