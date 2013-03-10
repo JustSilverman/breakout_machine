@@ -76,6 +76,7 @@ var table = {
     var self = this;
     $.post(form.action, $(form).serialize()).done(function(data){
       var row = JST["templates/table"]({topics: [data]});
+      self.addTopic(data)
       $('.topics-table').append(row);
       self.updateForUser(user);
     });
