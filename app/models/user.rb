@@ -43,9 +43,13 @@ class User < ActiveRecord::Base
     self.update_attribute(:open_votes, 3) if last_vote_date > 12.hours.ago
   end
 
+  def key_attrs
+    {name: self.name, open_votes: self.open_votes, topic_ids: active_ids,
+     group: self.group}
+  end
+
   def to_json
-    {name: self.name, open_votes: self.open_votes, topic_ids: self.topic_ids,
-     group: self.group}.to_json
+    self.key_attrs.to_json
   end
 
   def errors_template
@@ -56,6 +60,12 @@ class User < ActiveRecord::Base
   def default_values
     self.open_votes = 3
     self.group = "student"
+  end
+
+  def active_ids
+    Vote.select(:topic_id).
+         where(:user_id => self.id, :active => true).
+         map {|topic| topic.topic_id }
   end
 
   def last_vote_date

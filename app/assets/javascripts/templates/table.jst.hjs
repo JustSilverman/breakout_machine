@@ -11,8 +11,11 @@
     </td>
     <td class="vote-count">{{votes}} votes</td>
     <td class="btn-col">
-      <span class="vote" data-dir="up">
+      <span class="vote upvote" data-dir="up">
         <i class="icon-hand-up icon-2x icon-btn"></i>
+      </span>
+      <span class="vote downvote" data-dir="down">
+        <i class="icon-hand-down icon-2x icon-btn"></i>
       </span>
       <span class="complete" data-dir="up">
         <i class="icon-ok icon-2x icon-btn disabled"></i>

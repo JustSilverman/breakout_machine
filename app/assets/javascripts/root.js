@@ -91,11 +91,16 @@ var user = {
 
   update: function(data) {
     this.open_votes = data.open_votes;
+    this.topic_ids = data.topic_ids;
     this.render();
   },
 
   hasVotes: function() {
     return this.open_votes > 0
+  },
+
+  votedForTopic: function(id) {
+    return $.inArray(id, this.topic_ids) >= 0;
   },
 
   render: function() {
@@ -121,9 +126,17 @@ var user = {
       table.createNewTopic(this);
     });
 
-    $('.topic-list-body').on('click', '.vote', function(e){
+    $('.topic-list-body').on('click', '.upvote', function(e){
       e.preventDefault();
-      if ($(this).attr('data-dir') == "down" || user.hasVotes()) {
+      if (user.hasVotes()) {
+        table.findTopicByBtn($(this)).vote($(this));
+      }
+    });
+
+    $('.topic-list-body').on('click', '.downvote', function(e){
+      e.preventDefault();
+      var id = $(this).parents(".topic-row").attr('data-id');
+      if (user.votedForTopic(parseInt(id))) {
         table.findTopicByBtn($(this)).vote($(this));
       }
     });
@@ -152,7 +165,7 @@ Topic.prototype.vote = function($element) {
     $.post("topics/" + this.id, {_method: 'put', dir: dir}).done(function(data){
       self.update(data.topic);
       user.update(data.user);
-      table.render(user);
+      table.render(false, user);
     });
   }
 };
@@ -162,7 +175,7 @@ Topic.prototype.complete = function() {
   $.post("topics/complete/" + this.id, {_method: 'put'}).done(function(data){
     if (data) {
       table.removeTopic(self.id);
-      table.render(user);
+      table.render(false, user);
     }
   });
 };
@@ -209,23 +222,41 @@ var table = {
     });
   },
 
-  render: function(user) {
+  render: function(fresh, user) {
     this.sort();
     var table = JST["templates/table"]({topics: this.topics});
-    $(".topics-table").hide().fadeIn("slow").html(table);
+    if (fresh) {
+      $(".topics-table").hide().fadeIn("slow").html(table);
+    } else {
+      $(".topics-table").html(table);
+    }
     this.updateForUser(user);
   },
 
   updateForUser: function(user) {
     if (user) {
+      if (user.isTeacher()) {
+        $('span i.icon-ok').removeClass("disabled");
+      };
       if (user.hasVotes()) {
         $('span i.icon-hand-up').removeClass("disabled");
       } else {
         $('span i.icon-hand-up').addClass("disabled");
       };
-      if (user.isTeacher()) {
-        $('span i.icon-ok').removeClass("disabled");
+      this.updateDownVotes(user);
+    }
+  },
+
+  updateDownVotes: function(user) {
+    for (i in this.topics) {
+      var id = this.topics[i].id;
+      var span = $("tr[data-id='" + id +"']").children("td").children("span")
+      if (!user.votedForTopic(id)){
+        span.children("i.icon-hand-down").addClass("disabled");
+      } else {
+        span.children("i.icon-hand-down").removeClass("disabled");
       }
+
     }
   },
 
@@ -248,7 +279,7 @@ var table = {
   refresh: function(user, topics){
     this.topics = [];
     table.load(topics);
-    table.render(user);
+    table.render(true, user);
   }
 };
 

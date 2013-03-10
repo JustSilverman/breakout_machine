@@ -17,7 +17,7 @@ class TopicsController < ApplicationController
     if current_user.has_votes? || params[:dir] == "down"
       @topic.vote(params[:dir], current_user.id)
     end
-    render :json => {topic: @topic.key_attrs, user: current_user}.to_json
+    render :json => {topic: @topic.key_attrs, user: current_user.key_attrs}.to_json
   end
 
   def complete
