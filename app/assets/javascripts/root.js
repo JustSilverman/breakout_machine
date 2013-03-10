@@ -41,6 +41,7 @@ var user = {
     this.name = data.name;
     this.open_votes = data.open_votes;
     this.group = data.group;
+    this.topic_ids = data.topic_ids;
     this.render();
     this.setBindings();
     table.updateForUser(user);
