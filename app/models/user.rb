@@ -40,7 +40,9 @@ class User < ActiveRecord::Base
   end
 
   def refresh_votes
-    self.update_attribute(:open_votes, 3) if last_vote_date > 12.hours.ago
+    last_vote_date > 12.hours.ago || self.votes.count == 0
+      self.update_attribute(:open_votes, 3)
+    end
   end
 
   def key_attrs
