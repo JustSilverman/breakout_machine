@@ -1,12 +1,11 @@
 class UsersController < ApplicationController
   def create
     @user = User.new(params[:user])
-    sign_in @user if @user.save
-  end
-
-  def index
-  end
-
-  def destroy
+    if @user.save
+      sign_in @user
+      render :json => @user.to_json
+    else
+      render :json => {message: "We've got some errors", errors: @user.errors_template}
+    end
   end
 end

@@ -1,0 +1,22 @@
+{{#each topics}}
+  <tr class="topic-row" data-id="{{id}}">
+    <td>
+      {{title}}
+      <span class="row-small">
+        created on {{createdAt}}
+        {{#if lastVote}}
+          - last upvote {{lastVote}}
+        {{/if}}
+      </span>
+    </td>
+    <td class="vote-count">{{votes}} votes</td>
+    <td class="btn-col">
+      <span class="vote" data-dir="up">
+        <i class="icon-hand-up icon-2x icon-btn"></i>
+      </span>
+      <span class="complete" data-dir="up">
+        <i class="icon-ok icon-2x icon-btn disabled"></i>
+      </span>
+    </td>
+  </tr>
+{{/each}}

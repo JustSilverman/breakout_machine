@@ -23,7 +23,7 @@ ActiveRecord::Schema.define(:version => 20130225053316) do
   create_table "users", :force => true do |t|
     t.string   "name",            :null => false
     t.string   "email",           :null => false
-    t.string   "type"
+    t.string   "group"
     t.string   "password_digest"
     t.integer  "open_votes"
     t.datetime "created_at",      :null => false
@@ -36,9 +36,9 @@ ActiveRecord::Schema.define(:version => 20130225053316) do
   create_table "votes", :force => true do |t|
     t.integer  "user_id"
     t.integer  "topic_id"
-    t.boolean  "active"
-    t.datetime "created_at", :null => false
-    t.datetime "updated_at", :null => false
+    t.boolean  "active",     :default => true
+    t.datetime "created_at",                   :null => false
+    t.datetime "updated_at",                   :null => false
   end
 
 end

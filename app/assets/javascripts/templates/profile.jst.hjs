@@ -1,0 +1,7 @@
+<span class="user-name">
+  {{name}}
+</span>
+<span class="votes-left">
+  {{open_votes}} votes left today
+</span>
+<a class="logout" href="">(log me out)</a>

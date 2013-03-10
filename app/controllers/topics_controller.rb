@@ -1,41 +1,27 @@
 class TopicsController < ApplicationController
   def index
-    @topics = Topic.sort_by_votes
+    @topics    = Topic.with_json_attrs
+    respond_to do |format|
+      format.html
+      format.json { render :json => {:topics => @topics} }
+    end
   end
 
   def create
     @topic = Topic.new(:title => params[:title])
-
-    if @topic.save
-      render :json => { :topic_row => render_to_string(:_topic_row,
-                                                       :layout => false,
-                                                       :locals => {:topic => @topic })}
-    else
-      render 'index'
-    end
+    render :json => @topic.key_attrs.to_json if @topic.save
   end
 
   def update
-    if current_user.has_votes?
-      @topic = Topic.find(params[:id])
-      @topic.vote(params[:dir], current_user.id)
-      @topics = Topic.sort_by_votes
-
-      render :json => { :table => topics_table_json, :votes => votes_left_json}
-    end
-  end
-
-  def destroy
     @topic = Topic.find(params[:id])
-    @topic.destroy
-    redirect_to 'index'
+    if current_user.has_votes? || params[:dir] == "down"
+      @topic.vote(params[:dir], current_user.id)
+    end
+    render :json => {topic: @topic.key_attrs, user: current_user}.to_json
   end
 
-  def topics_table_json
-    render_to_string(:_topics_table, :layout => false, :locals => {:topics => @topics })
-  end
-
-  def votes_left_json
-    render_to_string('shared/_open_votes', :layout => false, :locals => {:current_user => current_user})
+  def complete
+    @topic = Topic.find(params[:id])
+    render :json => @topic.complete!.to_json
   end
 end

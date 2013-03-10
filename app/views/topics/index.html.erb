@@ -1,5 +1,6 @@
 <script>
   <%= "topics=#{@topics.to_json};".html_safe %>
+  <%= "current_user=#{current_user.to_json};".html_safe %>
 </script>
 <div class="topic-list">
   <div class="topic-list-header top-border-radius">
@@ -7,11 +8,11 @@
   </div>
 
   <div class="topic-list-body">
-    <%= render 'topics_table', :topics => @topics %>
+    <table class="topics-table"></table>
   </div>
 
   <div class="topic-list-footer bottom-border-radius">
-    <%= link_to "Create new topic", '#', class: "btn btn-small border-radius", id: "show-new-topic" %>
+    <%= link_to "Create new topic", "#", class: "btn btn-small border-radius", id: "show-new-topic" %>
     <div id="new-topic-form">
       <%= form_tag topics_path do %>
         <div class="field inline">

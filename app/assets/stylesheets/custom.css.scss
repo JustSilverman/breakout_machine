@@ -1,6 +1,8 @@
+@import "font-awesome";
+
 body {
   font-family: Helvetica;
-  background-image: url('px_by_Gre3g.png');
+  background-image: url('subtle_grunge.png');
   margin: 0;
 }
 
@@ -32,19 +34,21 @@ body {
   color: #eee;
 }
 
-.profile {
+.right-nav {
   float: right;
-  margin: 0.5em 2em 0.5em 0;
+  margin: 0.5em 0 0.5em 0;
   text-align: center;
 }
 
 .user-name {
   display: block;
+  margin-right: 2em;
 }
 
 .votes-left {
   display: block;
   font-size: 0.8em;
+  margin-right: 2em;
 }
 
 .container {
@@ -53,57 +57,83 @@ body {
 }
 
 .topic-list {
-  float: left;
-  margin: 5em auto 0 -6em;
+  position: absolute;
+  top: 6em;
+  left: 17.5em;
+  right: 17.5em;
+  margin: 0 auto;
   width: 35em;
-  color: #000;
-  /*margin-top: 5em;*/
+  color: #DBE4FF;
 }
 
 .topic-list-header {
-  background: #E75263;
+  background: #6C363C;
   text-align: center;
   padding: 0.6em;
-  border-bottom: 0.15em solid #eee;
+  border-bottom: 0.1em solid #DBE4FF;
   h2 {
     margin: 0;
   }
 }
 
 .topic-list-body {
-  background: #D70019;
+  background: #6C363C;
   color: #000;
-  padding-top: 0.5em;
+  padding: 0.5em;
 }
 
 .topics-table {
-  width: 35em;
+  width: 34em;
   margin: 0 auto;
   vertical-align: top;
+  border-collapse: collapse;
+  border-spacing: 0;
+}
+
+.topics-table tr {
+  height: 2.75em;
+}
+
+tr:nth-child(even) {
+  background-color: #96B1FF;
+  border-top: solid 2px #00668D;
+  border-bottom: solid 2px #00668D;
+}
+
+tr:nth-child(odd) {
+  background-color: #DBE4FF;
 }
 
 .topic-row td {
   margin-right: 2em;
-  vertical-align: top;
+  vertical-align: center;
+}
+
+td.vote-count {
+  text-align: center;
 }
 
 td.btn-col {
   margin-right: 0em;
   padding-right: 0em;
-  width: 5em;
+  width: 7em;
+  text-align: center;
 }
 
-.created-date {
+.row-small {
   display: block;
-  margin-top: 0.5em 0;
+  margin: 0 0 0 1em;
   font-size: 0.7em;
   color: #222;
+  a {
+    text-decoration: none
+  }
 }
 
 .topic-list-footer {
-  background: #D70019;
+  background: #6C363C;
   min-height: 4em;
-  border-top: 0.15em solid #eee;
+  border-top: 0.1em solid #DBE4FF;
 }
 
 .btn {
@@ -124,7 +154,7 @@ td.btn-col {
 .btn-small {
   font-size: 0.8em;
   text-align: center;
-  width: 5em;
+  width: 3em;
   margin-top: 0;
   cursor: pointer;
 }
@@ -163,7 +193,8 @@ td.btn-col {
 
 .small-form {
   display: none;
-  float: right;
+  position: fixed;
+  right: 0;
   padding: 0.5em;
   background-color: #6C363C;
   width: 12em;
@@ -191,6 +222,10 @@ td.btn-col {
 
 .small-form h4 {
   margin: 0 0 0.35em 0;
+}
+
+#messages h4 {
+  color: red;
 }
 
 #show-new-topic {
@@ -230,6 +265,41 @@ td.btn-col {
 
 a.logout {
   color: #001F2A;
+  margin-right: 2em;
   text-decoration: none;
   font-size: 0.65em;
+}
+
+.icon:hover {
+  cursor: pointer;
+}
+
+span.vote {
+  margin-right: 0.5em;
+}
+
+.icon-btn {
+  color: #001F2A;
+  cursor: pointer;
+}
+
+.disabled {
+  opacity: 0.4;
+  color: #8C8C8C;
+  cursor: auto;
+}
+
+.error {
+  color: #FF4242;
+}
+
+.small-form ul {
+  margin-bottom: 0.5em;
+  padding-left: 0.3em;
+  list-style-type: none;
+}
+
+.errors {
+  color: #FF4242;
+  font-size: 0.7em;
 }

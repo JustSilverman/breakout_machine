@@ -3,7 +3,7 @@ class CreateUsersTable < ActiveRecord::Migration
     create_table :users do |t|
       t.string  :name, :null => false
       t.string  :email, :null => false
-      t.string  :type
+      t.string  :group
       t.string  :password_digest
       t.integer :open_votes
 

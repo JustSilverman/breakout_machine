@@ -5,7 +5,6 @@ gem 'rails', '3.2.11'
 gem 'pg'
 gem "bcrypt-ruby", "~> 3.0.1"
 gem 'faker', '1.0.1'
-gem 'will_paginate', '3.0.3'
 gem 'jquery-rails', '2.0.2'
 gem 'jquery-ui-rails'
 gem 'chosen-rails'
@@ -13,10 +12,10 @@ gem 'jquery-qtip2-rails'
 gem 'debugger'
 gem "launchy", "~> 2.1.2"
 gem 'delayed_job_active_record'
-
+gem 'handlebars-rails', :git => 'git://github.com/kolo/handlebars-rails.git'
+gem "font-awesome-rails"
 
 group :development, :test do
-  gem 'sqlite3', '1.3.5'
   gem 'rspec-rails'
   gem 'shoulda-matchers'
   gem 'guard-rspec', '1.2.1'

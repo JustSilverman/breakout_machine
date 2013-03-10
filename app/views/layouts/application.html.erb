@@ -12,9 +12,6 @@
     <div class="container">
       <%= render 'shared/login' %>
       <%= render 'shared/signup' %>
-      <% flash.each do |key, value| %>
-        <%= content_tag(:div, value, class: "alert alert-#{key}") %>
-      <% end %>
       <%= yield %>
     </div>
     <%= render 'shared/footer' %>
