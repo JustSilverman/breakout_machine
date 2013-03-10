@@ -1,6 +1,6 @@
 module SessionsHelper
   def sign_in(user)
-    cookies[:user_id] = user.id
+    session[:user_id] = user.id
     self.current_user = user
   end
 
@@ -13,7 +13,7 @@ module SessionsHelper
   end
 
   def current_user
-    User.find_by_id(cookies[:user_id]) if cookies[:user_id]
+    User.find_by_id(session[:user_id]) if session[:user_id]
   end
 
   def current_user?(user)
@@ -21,7 +21,6 @@ module SessionsHelper
   end
 
   def sign_out
-    self.current_user = nil
-    cookies.delete(:user_id)
+    session.delete(:user_id)
   end
 end
