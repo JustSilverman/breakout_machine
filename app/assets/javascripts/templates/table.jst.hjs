@@ -3,9 +3,12 @@
     <td>
       {{title}}
       <span class="row-small">
-        created on {{createdAt}}
+        {{cohortName}}
         {{#if lastVote}}
-          - last upvote {{lastVote}}
+          (created on {{createdAt}}
+            | last upvote {{lastVote}})
+        {{else}}
+          (created on {{createdAt}})
         {{/if}}
       </span>
     </td>

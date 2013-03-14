@@ -1,13 +1,15 @@
 class User < ActiveRecord::Base
   VALID_EMAIL_REGEX = /\A[\w+\-.]+@[a-z\d\-.]+\.[a-z]+\z/i
+  belongs_to :cohort
   has_many :votes
   has_many :topics, :through => :votes
 
   attr_accessible :name, :email, :password,
-                  :password_confirmation
+                  :password_confirmation, :cohort_id
   has_secure_password
 
   validates_confirmation_of :password
+  validates :cohort_id, presence: true
   validates :name, presence: true, length: { maximum: 35 }
 
   validates :email, presence:   true,
@@ -46,8 +48,8 @@ class User < ActiveRecord::Base
   end
 
   def key_attrs
-    {name: self.name, open_votes: self.open_votes, topic_ids: active_ids,
-     group: self.group}
+    {name: self.name, open_votes: self.open_votes, topicIds: active_ids,
+     group: self.group, cohortId: self.cohort_id}
   end
 
   def to_json

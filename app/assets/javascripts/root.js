@@ -1,10 +1,5 @@
-function poll() {
-  $.getJSON("/topics").done(function(data){
-    table.refresh(user, data.topics);
-  });
-};
-
 $(document).ready(function(){
+  var pageCohort = pageCohort;
   if (current_user) {
     user.init(current_user);
   } else {
@@ -12,11 +7,9 @@ $(document).ready(function(){
   }
   table.refresh(user, topics);
 
-  window.setInterval(poll, 5000);
+  // window.setInterval(poll, 5000);
 });
 
-// Bind and reset login and signup forms if no user is logged in
-// Sits outside of user, table and topic classes/objects
 function bindEntryForms() {
   $('#login').click(function(e){
     e.preventDefault();
@@ -43,11 +36,13 @@ function bindEntryForms() {
     e.preventDefault();
     user.signup(this);
   });
+
+  $('#show-new-topic').hide();
+  $('.cohort-nav').hide();
 };
 
-// Refresh the table
 function poll() {
-  $.getJSON("/topics").done(function(data){
+  $.getJSON(location.pathname).done(function(data){
     table.refresh(user, data.topics);
   });
 };

@@ -1,0 +1,9 @@
+<div class="cohort-nav">
+  <span>Visit your cohort's list to create a topic</span>
+  <%= link_to "Bears", cohort_topics_path(:cohort_name => "golden_bears"),
+               class: "btn btn-small border-radius cohort" %>
+  <%= link_to "Slugs", cohort_topics_path(:cohort_name => "banana_slugs"),
+              class: "btn btn-small border-radius cohort" %>
+  <%= link_to "Lions", cohort_topics_path(:cohort_name => "sea_lions"),
+              class: "btn btn-small border-radius cohort" %>
+</div>

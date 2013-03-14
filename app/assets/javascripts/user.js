@@ -3,7 +3,8 @@ var user = {
     this.name = data.name;
     this.open_votes = data.open_votes;
     this.group = data.group;
-    this.topic_ids = data.topic_ids;
+    this.topicIds = data.topicIds;
+    this.cohortId = data.cohortId;
     this.render();
     this.setBindings();
     table.updateForUser(user);
@@ -53,7 +54,7 @@ var user = {
 
   update: function(data) {
     this.open_votes = data.open_votes;
-    this.topic_ids = data.topic_ids;
+    this.topicIds = data.topicIds;
     this.render();
   },
 
@@ -62,7 +63,7 @@ var user = {
   },
 
   votedForTopic: function(id) {
-    return $.inArray(id, this.topic_ids) >= 0;
+    return $.inArray(id, this.topicIds) >= 0;
   },
 
   render: function() {
@@ -76,17 +77,25 @@ var user = {
       user.logout();
     });
 
-    $('#show-new-topic').on('click', function(e) {
-      e.preventDefault();
-      $('#show-new-topic').hide();
-      $('#new-topic-form').show();
-      $('input.topic-form-field').focus();
-    });
+    if (pageCohort && pageCohort.id == this.cohortId) {
+      $('div.cohort-nav').hide();
+      $('#show-new-topic').show();
 
-    $('div#new-topic-form form').on('submit', function(e){
-      e.preventDefault();
-      table.createNewTopic(this);
-    });
+      $('#show-new-topic').on('click', function(e) {
+        e.preventDefault();
+        $('#show-new-topic').hide();
+        $('#new-topic-form').show();
+        $('input.topic-form-field').focus();
+      });
+
+      $('div#new-topic-form form').on('submit', function(e){
+        e.preventDefault();
+        table.createNewTopic(this);
+      });
+    } else {
+      $('div.cohort-nav').show();
+      $('#show-new-topic').hide();
+    }
 
     $('.topic-list-body').on('click', '.upvote', function(e){
       e.preventDefault();

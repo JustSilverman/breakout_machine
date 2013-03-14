@@ -11,13 +11,20 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20130225053316) do
+ActiveRecord::Schema.define(:version => 20130312031538) do
+
+  create_table "cohorts", :force => true do |t|
+    t.string   "name"
+    t.datetime "created_at", :null => false
+    t.datetime "updated_at", :null => false
+  end
 
   create_table "topics", :force => true do |t|
     t.string   "title"
     t.integer  "completed",  :default => 0, :null => false
     t.datetime "created_at",                :null => false
     t.datetime "updated_at",                :null => false
+    t.integer  "cohort_id"
   end
 
   create_table "users", :force => true do |t|
@@ -29,6 +36,7 @@ ActiveRecord::Schema.define(:version => 20130225053316) do
     t.datetime "created_at",      :null => false
     t.datetime "updated_at",      :null => false
     t.string   "remember_token"
+    t.integer  "cohort_id"
   end
 
   add_index "users", ["remember_token"], :name => "index_users_on_remember_token"

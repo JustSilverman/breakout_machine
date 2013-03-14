@@ -1,10 +1,11 @@
 <script>
   <%= "topics=#{@topics.to_json};".html_safe %>
   <%= "current_user=#{current_user.to_json};".html_safe %>
+  <%= "pageCohort=#{@cohort.to_json ||= nil};".html_safe %>
 </script>
 <div class="topic-list">
   <div class="topic-list-header top-border-radius">
-    <h2>Current Topic List</h2>
+    <h2><%= list_title(@cohort) %></h2>
   </div>
 
   <div class="topic-list-body">
@@ -12,17 +13,7 @@
   </div>
 
   <div class="topic-list-footer bottom-border-radius">
-    <%= link_to "Create new topic", "#", class: "btn btn-small border-radius", id: "show-new-topic" %>
-    <div id="new-topic-form">
-      <%= form_tag topics_path do %>
-        <div class="field inline">
-          <%= text_field_tag :title, nil, placeholder: "Topic description", class: "topic-form-field" %>
-        </div>
-
-        <div class="actions inline">
-          <%= submit_tag "Create Topic", class: "btn btn-small border-radius new-topic-btn" %>
-        </div>
-      <% end %>
-    </div>
+    <%= render 'footer_cohort_nav' %>
+    <%= render 'new_topic_form' %>
   </div>
 </div>

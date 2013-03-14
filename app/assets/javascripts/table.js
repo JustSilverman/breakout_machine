@@ -34,14 +34,10 @@ var table = {
     });
   },
 
-  render: function(fresh, user) {
+  render: function(user) {
     this.sort();
     var table = JST["templates/table"]({topics: this.topics});
-    if (fresh) {
-      $(".topics-table").hide().fadeIn("slow").html(table);
-    } else {
-      $(".topics-table").html(table);
-    }
+    $(".topics-table").html(table);
     this.updateForUser(user);
   },
 
@@ -50,25 +46,29 @@ var table = {
       if (user.isTeacher()) {
         $('span i.icon-ok').removeClass("disabled");
       };
-      if (user.hasVotes()) {
-        $('span i.icon-hand-up').removeClass("disabled");
-      } else {
-        $('span i.icon-hand-up').addClass("disabled");
-      };
+      this.updateUpVotes(user);
       this.updateDownVotes(user);
+    }
+  },
+
+  updateUpVotes: function(user) {
+    if(!user.hasVotes()) return $('span i.icon-hand-up').addClass("disabled");
+    for (i in this.topics) {
+      if (user.cohortId == this.topics[i].cohortId){
+        this.topics[i].icon("icon-hand-up").removeClass("disabled");
+      } else {
+        this.topics[i].icon("icon-hand-up").addClass("disabled");
+      }
     }
   },
 
   updateDownVotes: function(user) {
     for (i in this.topics) {
-      var id = this.topics[i].id;
-      var span = $("tr[data-id='" + id +"']").children("td").children("span")
-      if (!user.votedForTopic(id)){
-        span.children("i.icon-hand-down").addClass("disabled");
+      if (!user.votedForTopic(this.topics[i].id)){
+        this.topics[i].icon("icon-hand-down").addClass("disabled");
       } else {
-        span.children("i.icon-hand-down").removeClass("disabled");
+        this.topics[i].icon("icon-hand-down").removeClass("disabled");
       }
-
     }
   },
 
@@ -76,7 +76,7 @@ var table = {
     var self = this;
     $.post(form.action, $(form).serialize()).done(function(data){
       var row = JST["templates/table"]({topics: [data]});
-      self.addTopic(data)
+      self.addTopic(new Topic(data));
       $('.topics-table').append(row);
       self.updateForUser(user);
     });
@@ -92,6 +92,6 @@ var table = {
   refresh: function(user, topics){
     this.topics = [];
     table.load(topics);
-    table.render(true, user);
+    table.render(user);
   }
 };

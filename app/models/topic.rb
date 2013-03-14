@@ -2,23 +2,25 @@ class Topic < ActiveRecord::Base
   UPVOTE_DIR   = "up"
   DOWNVOTE_DIR = "down"
 
+  belongs_to :cohort
   has_many :votes, :autosave => true
   has_many :users, :through => :votes
 
-  attr_accessible :title
+  attr_accessible :title, :cohort_id
 
   validates :title, :presence => true
 
   before_create { self.completed = 0 }
   before_save { self.title.titleize }
 
-  def self.sort_by_votes
-    Topic.where(:completed => false).
+  def self.sort_by_votes(cohort)
+    ids = cohort ? cohort.id : Cohort.select(:id).map(&:id)
+    Topic.where(:completed => false, :cohort_id => ids).
           sort_by { |topic| 1.0 / topic.active_vote_count }
   end
 
-  def self.with_json_attrs
-    Topic.sort_by_votes.map(&:key_attrs)
+  def self.with_json_attrs(cohort)
+    Topic.sort_by_votes(cohort).map(&:key_attrs)
   end
 
   def completed?
@@ -54,7 +56,8 @@ class Topic < ActiveRecord::Base
   def key_attrs
     {id: self.id, title: self.title, votes: self.active_vote_count,
      createdAt: self.created_at.strftime("%m-%d-%Y"),
-     lastVote: self.last_upvote_date}
+     lastVote: self.last_upvote_date, cohortId: self.cohort_id,
+     cohortName: self.cohort.name}
   end
 
   private
