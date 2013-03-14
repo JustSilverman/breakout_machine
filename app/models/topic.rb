@@ -15,11 +15,13 @@ class Topic < ActiveRecord::Base
 
   def self.sort_by_votes(cohort)
     ids = cohort ? cohort.id : Cohort.select(:id).map(&:id)
-    self.select("topics.*, COUNT(votes.id) as votes_count").
-         where(:completed => false, :cohort_id => ids).
-         joins(:votes).
-         group('topics.id').
-         order('votes_count DESC')
+    Topic.where(:completed => false, :cohort_id => ids).
+           sort_by { |topic| 1.0 / topic.active_vote_count }
+    # self.select("topics.*, COUNT(votes.id) as votes_count").
+    #      where(:completed => false, :cohort_id => ids).
+    #      joins(:votes).
+    #      group('topics.id').
+    #      order('votes_count DESC')
   end
 
   def self.with_json_attrs(cohort)
