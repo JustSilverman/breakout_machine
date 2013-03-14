@@ -15,8 +15,11 @@ class Topic < ActiveRecord::Base
 
   def self.sort_by_votes(cohort)
     ids = cohort ? cohort.id : Cohort.select(:id).map(&:id)
-    Topic.where(:completed => false, :cohort_id => ids).
-          sort_by { |topic| 1.0 / topic.active_vote_count }
+    self.select("topics.*, COUNT(votes.id) as votes_count").
+         where(:completed => false, :cohort_id => ids).
+         joins(:votes).
+         group('topics.id').
+         order('votes_count DESC')
   end
 
   def self.with_json_attrs(cohort)
@@ -39,7 +42,7 @@ class Topic < ActiveRecord::Base
     Vote.where(:topic_id => self.id, :active => true)
   end
 
-  def vote(dir, user_id)
+  def vote!(dir, user_id)
     user = User.find(user_id)
     dir == UPVOTE_DIR ? upvote(user) : downvote(user)
   end

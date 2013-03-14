@@ -12,7 +12,7 @@ Topic.prototype.vote = function($element) {
   var dir = $element.attr('data-dir');
   var self = this;
   if (dir == "up" || this.votes > 0) {
-    $.post(this.id, {_method: 'put', dir: dir}).done(function(data){
+    $.post("/topics/" + this.id, {_method: 'put', dir: dir}).done(function(data){
       self.update(data.topic);
       user.update(data.user);
       table.render(user);
@@ -22,7 +22,7 @@ Topic.prototype.vote = function($element) {
 
 Topic.prototype.complete = function() {
   var self = this;
-  $.post("topics/complete/" + this.id, {_method: 'put'}).done(function(data){
+  $.post("/topics/complete/" + this.id, {_method: 'put'}).done(function(data){
     if (data) {
       table.removeTopic(self.id);
       table.render(user);

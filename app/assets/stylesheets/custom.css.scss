@@ -49,8 +49,11 @@ body {
   border-bottom: solid 2px #00668D;
   text-align: center;
   .sub-nav-link {
+    display: inline-block;
     margin: 0;
     padding: 0.3em 1em;
+    width: 6em;
+    font-weight: bold;
     text-decoration: none;
     color: #001F2A;
     line-height: 2em;
@@ -152,9 +155,16 @@ td.btn-col {
   display: block;
   margin: 0 0 0 1em;
   font-size: 0.7em;
-  color: #222;
+  color: #6C363C;;
+  font-weight: bold;
+
   a {
     text-decoration: none
+  }
+  .date-info {
+    font-style: italic;
+    font-weight: normal;
+    color: #222;
   }
 }
 
@@ -245,7 +255,7 @@ td.btn-col {
 .small-form {
   display: none;
   position: fixed;
-  top: 6em;
+  top: 6.6em;
   right: 0;
   padding: 0.5em;
   background: #8C8588;;

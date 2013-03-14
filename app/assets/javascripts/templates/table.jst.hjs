@@ -4,12 +4,14 @@
       {{title}}
       <span class="row-small">
         {{cohortName}}
-        {{#if lastVote}}
-          (created on {{createdAt}}
-            | last upvote {{lastVote}})
-        {{else}}
-          (created on {{createdAt}})
-        {{/if}}
+        <span class="date-info">
+          {{#if lastVote}}
+            (created on {{createdAt}}
+              | last upvote {{lastVote}})
+          {{else}}
+            (created on {{createdAt}})
+          {{/if}}
+        </span>
       </span>
     </td>
     <td class="vote-count">{{votes}} votes</td>
