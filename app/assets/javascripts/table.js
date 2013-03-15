@@ -31,12 +31,7 @@ var table = {
     }
   },
 
-  findTopicByBtn: function($row) {
-    var id = $row.parent().parents(".topic-row").attr('data-id');
-    return this.findTopicById(id);
-  },
-
-  removeTopic: function(event, id) {
+  removeTopic: function(id) {
     var topic = this.findTopicById(id);
     this.topics.splice(this.topics.indexOf(topic), 1);
   },
@@ -49,7 +44,6 @@ var table = {
 
   listen: function() {
     $('table').on('complete', 'tr', function(event, id){
-      debugger
       table.removeTopic(id);
       table.render();
     });
@@ -63,7 +57,6 @@ var table = {
       var newTopic = new Topic(data);
       table.addTopic(newTopic);
       $('table.topics-table').append($(JST["templates/row"](newTopic.attrs())));
-      newTopic.listen();
       table.updateForUser();
       table.resetForm();
     });
@@ -81,37 +74,36 @@ var table = {
 
   updateForUser: function() {
     if (this.user) {
-      this.updateUpVotes(this.topics);
-      this.updateDownVotes(this.topics);
+      for (i in this.topics) {
+        this.updateUpVotes(this.topics[i]);
+        this.updateDownVotes(this.topics[i]);
+        this.topics[i].listen();
+      }
       this.updateComplete();
     }
   },
 
-  updateUpVotes: function(topics) {
-    for (i in topics) {
-      if (this.user.hasVotes() && this.user.cohortId == topics[i].cohortId) {
-        topics[i].icon("icon-hand-up").removeClass("disabled");
-        topics[i].upvoteBtn().on("click", true);
-        topics[i].upvoteBtn().removeClass("disabled");
-      } else {
-        topics[i].icon("icon-hand-up").addClass("disabled");
-        topics[i].upvoteBtn().on("click", false);
-        topics[i].upvoteBtn().addClass("disabled");
-      }
+  updateUpVotes: function(topic) {
+    if (this.user.hasVotes() && this.user.cohortId == topic.cohortId) {
+      topic.icon("icon-hand-up").removeClass("disabled");
+      topic.upvoteBtn().on("click", true);
+      topic.upvoteBtn().removeClass("disabled");
+    } else {
+      topic.icon("icon-hand-up").addClass("disabled");
+      topic.upvoteBtn().on("click", false);
+      topic.upvoteBtn().addClass("disabled");
     }
   },
 
-  updateDownVotes: function(topics) {
-    for (i in topics) {
-      if (!this.user.votedForTopic(topics[i].id)) {
-        topics[i].icon("icon-hand-down").addClass("disabled");
-        topics[i].downvoteBtn().on("click", false);
-        topics[i].downvoteBtn().addClass("disabled");
-      } else {
-        topics[i].icon("icon-hand-down").removeClass("disabled");
-        topics[i].downvoteBtn().on("click", true);
-        topics[i].downvoteBtn().removeClass("disabled");
-      }
+  updateDownVotes: function(topic) {
+    if (!this.user.votedForTopic(topic.id)) {
+      topic.icon("icon-hand-down").addClass("disabled");
+      topic.downvoteBtn().on("click", false);
+      topic.downvoteBtn().addClass("disabled");
+    } else {
+      topic.icon("icon-hand-down").removeClass("disabled");
+      topic.downvoteBtn().on("click", true);
+      topic.downvoteBtn().removeClass("disabled");
     }
   },
 

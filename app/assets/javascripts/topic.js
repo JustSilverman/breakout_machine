@@ -6,12 +6,12 @@ function Topic(data) {
   this.cohortName =  data.cohortName;
   this.createdAt = data.createdAt;
   this.lastVote =  data.lastVote;
-  this.listen();
 };
 
 Topic.prototype.listen = function() {
   var self = this;
 
+  // Throws an Uncaught TypeError: Object #<error> has no method 'apply'
   $(self.upvoteBtn()).on('ajax:success', function(event, data){
     self.row().trigger('vote', data);
   });
