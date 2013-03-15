@@ -1,31 +1,30 @@
 <div id="signup-form" class="small-form bottom-border-radius">
   <h4>Signup below</h4>
-  <%= form_tag users_path do %>
+  <%= form_for User.new, :remote => true do |f| %>
     <div class="field">
-      <%= text_field_tag "user[name]", nil, placeholder: "name", class: "small-form-field" %>
+      <%= f.text_field :name, placeholder: "name", class: "small-form-field" %>
     </div>
 
     <div class="field">
-      <%= text_field_tag "user[email]", nil, placeholder: "email", class: "small-form-field" %>
+      <%= f.text_field :email, placeholder: "email", class: "small-form-field" %>
     </div>
 
     <div class="field">
-      <%= password_field_tag "user[password]", nil, placeholder: "password", class: "small-form-field" %>
+      <%= f.password_field :password, placeholder: "password", class: "small-form-field" %>
     </div>
 
     <div class="field">
-      <%= password_field_tag "user[password_confirmation]", nil, placeholder: "password", class: "small-form-field" %>
+      <%= f.password_field :password_confirmation, placeholder: "password", class: "small-form-field" %>
     </div>
 
     <div class="field">
-      <%= select_tag "user[cohort_id]",
-                      options_from_collection_for_select(Cohort.all, "id", "name"),
-                      {:prompt => "Cohort", class: "small-form-field"} %>
+      <%= f.select :cohort_id, Cohort.all.collect { |c| [c.name, c.id] },
+                            {:prompt => "Cohort", class: "small-form-field"} %>
     </div>
 
     <div class="actions">
       <div>
-        <%= submit_tag "Sign up", class: "btn-small-form border-radius" %>
+        <%= f.submit "Sign up", class: "btn-small-form border-radius" %>
       </div>
     </div>
   <% end %>

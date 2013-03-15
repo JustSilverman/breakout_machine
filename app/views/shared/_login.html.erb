@@ -1,6 +1,6 @@
 <div id="login-form" class="small-form bottom-border-radius">
   <h4>Login below</h4>
-  <%= form_tag sessions_path do %>
+  <%= form_tag sessions_path, :remote => true do %>
     <div class="field">
       <%= text_field_tag "user[email]", nil, placeholder: "email", class: "small-form-field" %>
     </div>

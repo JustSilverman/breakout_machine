@@ -11,7 +11,9 @@
   </div>
 
   <div class="right-nav">
-    <%= link_to "Log in",  '#', class: "nav-link", id: "login" unless current_user %>
-    <%= link_to "Sign Up", '#', class: "nav-link", id: "signup" unless current_user %>
+    <%= link_to "Log in",  '#', :remote => true,
+                class: "nav-link", id: "login" unless current_user %>
+    <%= link_to "Sign Up", '#', :remote => true,
+                class: "nav-link", id: "signup" unless current_user %>
   </div>
 </div>

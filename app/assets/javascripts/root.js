@@ -11,30 +11,27 @@ $(document).ready(function(){
 });
 
 function bindEntryForms() {
-  $('#login').click(function(e){
-    e.preventDefault();
+  $('a#login').on('ajax:success', function(){
     $('#signup-form').hide();
     $(".small-form ul").remove();
     $('div.small-form h4').removeClass("error").html("Login below");
     $('#login-form').slideDown();
   });
 
-  $('#signup').click(function(e){
-    e.preventDefault();
+  $('a#signup').on('ajax:success', function(){
     $('#login-form').hide();
     $(".small-form ul").remove();
     $('div.small-form h4').removeClass("error").html("Signup below");
     $('#signup-form').slideDown();
   });
 
-  $('div#login-form form').submit(function(e){
-    e.preventDefault();
-    user.login(this);
-  });
-
-  $('div#signup-form form').submit(function(e){
-    e.preventDefault();
-    user.signup(this);
+  $('div.small-form form').on('ajax:success', function(event, data){
+    user.process(data);
+    if (!data.message) {
+      $('div#login-form').slideUp();
+      $('div#signup-form').slideUp();
+      $('.nav-link').hide();
+    }
   });
 
   $('#show-new-topic').hide();

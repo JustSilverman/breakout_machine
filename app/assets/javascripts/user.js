@@ -1,4 +1,5 @@
 var user = {
+
   init: function(data){
     this.name = data.name;
     this.open_votes = data.open_votes;
@@ -7,7 +8,6 @@ var user = {
     this.cohortId = data.cohortId;
     this.render();
     this.setBindings();
-    this.listen();
     table.updateForUser(user);
   },
 
@@ -15,21 +15,7 @@ var user = {
     return this.group == "teacher";
   },
 
-  signup: function(form) {
-    var self = this;
-    $.post(form.action, $(form).serialize()).done(function(data){
-      self.processUser(data);
-    });
-  },
-
-  login: function(form) {
-    var self = this;
-    $.post(form.action, $(form).serialize()).done(function(data){
-      self.processUser(data);
-    });
-  },
-
-  processUser: function(data) {
+  process: function(data) {
     if (data.message) {
       $('div.small-form h4').html(data.message).addClass("error");
       var errors = JST["templates/errors"]({errors: data.errors});
@@ -37,14 +23,7 @@ var user = {
       $(".small-form h4").after(errors);
     } else {
       user.init(data);
-      this.hideUserForms();
     }
-  },
-
-  hideUserForms: function() {
-    $('div#login-form').slideUp();
-    $('div#signup-form').slideUp();
-    $('.nav-link').hide();
   },
 
   logout: function() {
