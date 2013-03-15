@@ -369,3 +369,9 @@ span.vote {
 a.icon {
   text-decoration: none;
 }
+
+a.icon.disabled {
+  text-decoration: none;
+  pointer-events: none;
+  cursor: default;
+}

@@ -59,9 +59,9 @@ var table = {
     });
 
     $('div#new-topic-form form').on('ajax:success', function(event, data){
-      var row = JST["templates/table"]({topics: [data]});
-      table.addTopic(new Topic(data));
-      $('.topics-table').append(row);
+      var newTopic = new Topic(data);
+      table.addTopic(newTopic);
+      $('table.topics-table').append($(JST["templates/row"](newTopic.attrs())));
       table.updateForUser();
       table.resetForm();
     });
@@ -89,8 +89,12 @@ var table = {
     for (i in topics) {
       if (this.user.hasVotes() && this.user.cohortId == topics[i].cohortId) {
         topics[i].icon("icon-hand-up").removeClass("disabled");
+        topics[i].upvoteBtn().on("click", true);
+        topics[i].upvoteBtn().removeClass("disabled");
       } else {
         topics[i].icon("icon-hand-up").addClass("disabled");
+        topics[i].upvoteBtn().on("click", false);
+        topics[i].upvoteBtn().addClass("disabled");
       }
     }
   },
@@ -99,8 +103,12 @@ var table = {
     for (i in topics) {
       if (!this.user.votedForTopic(topics[i].id)) {
         topics[i].icon("icon-hand-down").addClass("disabled");
+        topics[i].downvoteBtn().on("click", false);
+        topics[i].downvoteBtn().addClass("disabled");
       } else {
         topics[i].icon("icon-hand-down").removeClass("disabled");
+        topics[i].downvoteBtn().on("click", true);
+        topics[i].downvoteBtn().removeClass("disabled");
       }
     }
   },
@@ -113,7 +121,7 @@ var table = {
 
   resetForm: function(){
     $('div#new-topic-form').hide();
-    $('input#title').val("");
+    $('#topic_title').val("");
     $('#show-new-topic').show();
   },
 };

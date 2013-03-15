@@ -13,11 +13,9 @@ Topic.prototype.listen = function() {
   var self = this;
 
   $(self.upvoteBtn()).on('ajax:success', function(event, data){
-    // self.update(data.topic);
     self.row().trigger('vote', data);
   });
   $(self.downvoteBtn()).on('ajax:success', function(event, data){
-    // self.update(data.topic);
     self.row().trigger('vote', data);
   });
 
@@ -44,16 +42,28 @@ Topic.prototype.icon = function(icon) {
   return $("tr[data-id='" + this.id +"']").find("span i." + icon);
 };
 
-Topic.prototype.upvoteBtn = function(icon) {
+Topic.prototype.anchor = function(icon) {
+  return $("tr[data-id='" + this.id +"']").find("span i." + icon);
+};
+
+Topic.prototype.upvoteBtn = function() {
   return this.icon("icon-hand-up").parent('a');
 };
 
-Topic.prototype.downvoteBtn = function(icon) {
+Topic.prototype.downvoteBtn = function() {
   return this.icon("icon-hand-down").parent('a');
 };
 
-Topic.prototype.completeBtn = function(icon) {
+Topic.prototype.completeBtn = function() {
   return this.icon("icon-ok").parent('a');
+};
+
+Topic.prototype.disableBtn = function(icon) {
+  debugger
+};
+
+Topic.prototype.enableBtn = function(icon) {
+  debugger
 };
 
 Topic.prototype.dateInfo = function() {
