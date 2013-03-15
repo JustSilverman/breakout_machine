@@ -7,6 +7,7 @@ var user = {
     this.cohortId = data.cohortId;
     this.render();
     this.setBindings();
+    this.listen();
     table.updateForUser(user);
   },
 
@@ -52,10 +53,10 @@ var user = {
     });
   },
 
-  update: function(data) {
-    this.open_votes = data.open_votes;
-    this.topicIds = data.topicIds;
-    this.render();
+  update: function(event, data) {
+    user.open_votes = data.open_votes;
+    user.topicIds = data.topicIds;
+    user.render();
   },
 
   hasVotes: function() {
@@ -69,6 +70,10 @@ var user = {
   render: function() {
     var profile = JST["templates/profile"](this);
     $('.right-nav').html(profile);
+  },
+
+  listen: function() {
+    $('table').on('vote', 'tr', this.update);
   },
 
   setBindings: function() {

@@ -7,7 +7,7 @@ $(document).ready(function(){
   }
   table.refresh(user, topics);
 
-  window.setInterval(poll, 5000);
+  // window.setInterval(poll, 5000);
 });
 
 function bindEntryForms() {

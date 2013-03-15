@@ -14,8 +14,9 @@ Topic.prototype.vote = function($element) {
   if (dir == "up" || this.votes > 0) {
     $.post("/topics/" + this.id, {_method: 'put', dir: dir}).done(function(data){
       self.update(data.topic);
-      user.update(data.user);
-      table.render(user);
+      self.row().trigger('vote', data.user);
+
+      // table.render(user);
     });
   }
 };
@@ -36,6 +37,11 @@ Topic.prototype.update = function(data) {
   this.lastVote  = data.lastVote;
 };
 
+Topic.prototype.row = function() {
+  return $("tr[data-id='" + this.id +"']");
+};
+
 Topic.prototype.icon = function(icon) {
+  // return this.row().find("span i." + icon);
   return $("tr[data-id='" + this.id +"']").find("span i." + icon);
 };
