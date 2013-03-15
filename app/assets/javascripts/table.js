@@ -49,6 +49,7 @@ var table = {
 
   listen: function() {
     $('table').on('complete', 'tr', function(event, id){
+      debugger
       table.removeTopic(id);
       table.render();
     });
@@ -62,6 +63,7 @@ var table = {
       var newTopic = new Topic(data);
       table.addTopic(newTopic);
       $('table.topics-table').append($(JST["templates/row"](newTopic.attrs())));
+      newTopic.listen();
       table.updateForUser();
       table.resetForm();
     });

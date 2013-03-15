@@ -58,14 +58,6 @@ Topic.prototype.completeBtn = function() {
   return this.icon("icon-ok").parent('a');
 };
 
-Topic.prototype.disableBtn = function(icon) {
-  debugger
-};
-
-Topic.prototype.enableBtn = function(icon) {
-  debugger
-};
-
 Topic.prototype.dateInfo = function() {
   if (this.lastVote) {
     return "(created on " + this.createdAt + " | last upvote " +  this.lastVote + ")";
