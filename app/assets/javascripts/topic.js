@@ -6,25 +6,26 @@ function Topic(data) {
   this.cohortName =  data.cohortName;
   this.createdAt = data.createdAt;
   this.lastVote =  data.lastVote;
+  this.attrs = {id: this.id, title: this.title, cohortName: this.cohortName, votes: this.votes, dateInfo: this.dateInfo()};
+  this.listen();
 };
 
-Topic.prototype.vote = function($element) {
-  var dir = $element.attr('data-dir');
+Topic.prototype.listen = function() {
   var self = this;
-  if (dir == "up" || this.votes > 0) {
-    $.post("/topics/" + this.id, {_method: 'put', dir: dir}).done(function(data){
-      self.update(data.topic);
-      self.row().trigger('vote', data.user);
-    });
-  }
-};
 
-Topic.prototype.complete = function() {
-  var self = this;
-  $.post("/topics/complete/" + this.id, {_method: 'put'}).done(function(data){
-    if (data) {
-      self.row().trigger('complete', self.id);
-    }
+  $(self.upvoteBtn()).on('ajax:success', function(event, data){
+    debugger
+
+  });
+
+  $(self.downvoteBtn()).on('ajax:success', function(event, data){
+    debugger
+
+  });
+
+  $(self.completeBtn()).on('ajax:success', function(event, data){
+    debugger
+
   });
 };
 
@@ -39,6 +40,25 @@ Topic.prototype.row = function() {
 };
 
 Topic.prototype.icon = function(icon) {
-  // return this.row().find("span i." + icon);
   return $("tr[data-id='" + this.id +"']").find("span i." + icon);
 };
+
+Topic.prototype.upvoteBtn = function(icon) {
+  return this.icon("icon-hand-up").parent('a');
+};
+
+Topic.prototype.downvoteBtn = function(icon) {
+  return this.icon("icon-hand-down").parent('a');
+};
+
+Topic.prototype.completeBtn = function(icon) {
+  return this.icon("icon-hand-down").parent('a');
+};
+
+Topic.prototype.dateInfo = function() {
+  if (this.lastVote) {
+    return "(created on " + this.createdAt + " | last upvote " +  this.lastVote + ")";
+  } else {
+    return "(created on " + this.createdAt + ")";
+  }
+}

@@ -1,0 +1,7 @@
+<td>
+  {{title}}
+  <span class="row-small">
+    {{cohortName}}
+    <span class="date-info">{{dateInfo}}</span>
+  </span>
+</td>

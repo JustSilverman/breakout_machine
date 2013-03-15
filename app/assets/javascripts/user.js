@@ -76,27 +76,5 @@ var user = {
       $('div.cohort-nav').show();
       $('#show-new-topic').hide();
     }
-
-    $('.topic-list-body').on('click', '.upvote', function(e){
-      e.preventDefault();
-      if (user.hasVotes()) {
-        table.findTopicByBtn($(this)).vote($(this));
-      }
-    });
-
-    $('.topic-list-body').on('click', '.downvote', function(e){
-      e.preventDefault();
-      var id = $(this).parents(".topic-row").attr('data-id');
-      if (user.votedForTopic(parseInt(id))) {
-        table.findTopicByBtn($(this)).vote($(this));
-      }
-    });
-
-    if (this.group == "teacher") {
-      $('.topic-list-body').on('click', '.complete', function(e){
-        e.preventDefault();
-        table.findTopicByBtn($(this)).complete();
-      });
-    }
   }
 };

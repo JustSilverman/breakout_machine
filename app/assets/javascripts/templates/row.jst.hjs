@@ -1,0 +1,34 @@
+<tr class="topic-row" data-id="{{id}}">
+  <td>
+    {{title}}
+    <span class="row-small">
+      {{cohortName}}
+      <span class="date-info">
+        {{#if lastVote}}
+          (created on {{createdAt}}
+            | last upvote {{lastVote}})
+        {{else}}
+          (created on {{createdAt}})
+        {{/if}}
+      </span>
+    </span>
+  </td>
+  <td class="vote-count">{{votes}} votes</td>
+  <td class="btn-col">
+    <span class="vote upvote" data-dir="up">
+      <a href="/topics/{{id}}?dir=up" class="icon" data-remote="true" data-method="put">
+        <i class="icon-hand-up icon-2x icon-btn"></i>
+      </a>
+    </span>
+    <span class="vote downvote" data-dir="down">
+      <a href="/topics/{{id}}?dir=down" class="icon" data-remote="true" data-method="put">
+        <i class="icon-hand-down icon-2x icon-btn"></i>
+      </a>
+    </span>
+    <span class="complete" data-dir="up">
+      <a href="/topics/complete/{{id}}" class="icon" data-remote="true" data-method="put">
+        <i class="icon-ok icon-2x icon-btn disabled"></i>
+      </a>
+    </span>
+  </td>
+</tr>

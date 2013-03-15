@@ -5,6 +5,7 @@ class TopicsController < ApplicationController
 
   def index
     @topics = Topic.with_json_attrs(@cohort)
+
     respond_to do |format|
       format.html
       format.json { render :json => {:topics => @topics} }
