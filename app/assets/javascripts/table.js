@@ -1,5 +1,18 @@
 var table = {
   topics: [],
+  user: null,
+
+  init: function(user, topics) {
+    this.user = user;
+    this.load(topics);
+    this.listen();
+    table.render(user);
+  },
+
+  refresh: function(user, topics){
+    this.topics = [];
+    this.init(user, topics);
+  },
 
   load: function(topics) {
     for (i in topics) {
@@ -23,7 +36,7 @@ var table = {
     return this.findTopicById(id);
   },
 
-  removeTopic: function(id) {
+  removeTopic: function(event, id) {
     var topic = this.findTopicById(id);
     this.topics.splice(this.topics.indexOf(topic), 1);
   },
@@ -34,27 +47,34 @@ var table = {
     });
   },
 
-  render: function(user) {
+  render: function() {
     this.sort();
     var table = JST["templates/table"]({topics: this.topics});
     $(".topics-table").html(table);
-    this.updateForUser(user);
+    this.updateForUser();
   },
 
-  updateForUser: function(user) {
-    if (user) {
-      if (user.isTeacher()) {
+  updateForUser: function() {
+    if (this.user) {
+      if (this.user.isTeacher()) {
         $('span i.icon-ok').removeClass("disabled");
       };
-      this.updateUpVotes(user);
-      this.updateDownVotes(user);
+      this.updateUpVotes();
+      this.updateDownVotes();
     }
   },
 
-  updateUpVotes: function(user) {
-    if(!user.hasVotes()) return $('span i.icon-hand-up').addClass("disabled");
+  listen: function() {
+    $('table').on('complete', 'tr', function(event, id){
+      table.removeTopic(id);
+      table.render();
+    });
+  },
+
+  updateUpVotes: function() {
+    if(!this.user.hasVotes()) return $('span i.icon-hand-up').addClass("disabled");
     for (i in this.topics) {
-      if (user.cohortId == this.topics[i].cohortId){
+      if (this.user.cohortId == this.topics[i].cohortId){
         this.topics[i].icon("icon-hand-up").removeClass("disabled");
       } else {
         this.topics[i].icon("icon-hand-up").addClass("disabled");
@@ -62,9 +82,9 @@ var table = {
     }
   },
 
-  updateDownVotes: function(user) {
+  updateDownVotes: function() {
     for (i in this.topics) {
-      if (!user.votedForTopic(this.topics[i].id)){
+      if (!this.user.votedForTopic(this.topics[i].id)){
         this.topics[i].icon("icon-hand-down").addClass("disabled");
       } else {
         this.topics[i].icon("icon-hand-down").removeClass("disabled");
@@ -78,7 +98,7 @@ var table = {
       var row = JST["templates/table"]({topics: [data]});
       self.addTopic(new Topic(data));
       $('.topics-table').append(row);
-      self.updateForUser(user);
+      self.updateForUser();
     });
     this.resetForm();
   },
@@ -88,10 +108,4 @@ var table = {
     $('input#title').val("");
     $('#show-new-topic').show();
   },
-
-  refresh: function(user, topics){
-    this.topics = [];
-    table.load(topics);
-    table.render(user);
-  }
 };

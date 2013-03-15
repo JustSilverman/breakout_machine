@@ -5,7 +5,7 @@ $(document).ready(function(){
   } else {
     bindEntryForms();
   }
-  table.refresh(user, topics);
+  table.init(user, topics);
 
   // window.setInterval(poll, 5000);
 });

@@ -15,8 +15,6 @@ Topic.prototype.vote = function($element) {
     $.post("/topics/" + this.id, {_method: 'put', dir: dir}).done(function(data){
       self.update(data.topic);
       self.row().trigger('vote', data.user);
-
-      // table.render(user);
     });
   }
 };
@@ -25,8 +23,7 @@ Topic.prototype.complete = function() {
   var self = this;
   $.post("/topics/complete/" + this.id, {_method: 'put'}).done(function(data){
     if (data) {
-      table.removeTopic(self.id);
-      table.render(user);
+      self.row().trigger('complete', self.id);
     }
   });
 };
