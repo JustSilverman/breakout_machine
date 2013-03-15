@@ -8,6 +8,7 @@ var user = {
     this.cohortId = data.cohortId;
     this.render();
     this.setBindings();
+    this.listen();
     table.updateForUser(user);
   },
 
@@ -33,8 +34,8 @@ var user = {
   },
 
   update: function(event, data) {
-    user.open_votes = data.open_votes;
-    user.topicIds = data.topicIds;
+    user.open_votes = data.user.open_votes;
+    user.topicIds = data.user.topicIds;
     user.render();
   },
 

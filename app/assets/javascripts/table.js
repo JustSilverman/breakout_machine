@@ -48,21 +48,20 @@ var table = {
   },
 
   listen: function() {
-    $('span.complete a').on('ajax:success', function(){
-      debugger
+    $('table').on('complete', 'tr', function(event, id){
       table.removeTopic(id);
       table.render();
     });
 
-    $('span.vote a').on('ajax:success', function(){
-      debugger
-
+    $('table').on('vote', 'tr', function(event, data){
+      table.findTopicById(data.topic.id).update(data.topic)
+      table.render();
     });
 
     $('div#new-topic-form form').on('ajax:success', function(event, data){
-      topic = new Topic(data);
-      $('table.topics-table').append($(JST["templates/row"](topic.attrs)));
-      table.addTopic(topic);
+      var row = JST["templates/table"]({topics: [data]});
+      table.addTopic(new Topic(data));
+      $('.topics-table').append(row);
       table.updateForUser();
       table.resetForm();
     });
@@ -70,10 +69,10 @@ var table = {
 
   render: function() {
     this.sort();
+    $('table.topics-table').html("");
     for (i in this.topics) {
-      var topic = this.topics[i];
-      $('table.topics-table').append($(JST["templates/row"](topic.attrs)));
-      topic.listen();
+      $('table.topics-table').append($(JST["templates/row"](this.topics[i].attrs())));
+      this.topics[i].listen();
     }
     this.updateForUser();
   },
