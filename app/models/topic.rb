@@ -6,7 +6,7 @@ class Topic < ActiveRecord::Base
   has_many :votes, :autosave => true
   has_many :users, :through => :votes
 
-  attr_accessible :title, :cohort_id
+  attr_accessible :title, :cohort
 
   validates :title, :presence => true
 

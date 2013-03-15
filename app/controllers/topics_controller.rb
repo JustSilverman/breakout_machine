@@ -1,6 +1,7 @@
 class TopicsController < ApplicationController
   before_filter :find_topic,   :only => [:update, :complete]
   before_filter :find_cohort,  :only => [:index]
+  # respond_to :json, :html
 
   def index
     @topics = Topic.with_json_attrs(@cohort)
@@ -11,8 +12,9 @@ class TopicsController < ApplicationController
   end
 
   def create
-    @topic = Topic.new(:title => params[:title],
-                       :cohort_id => current_user.cohort_id)
+    @topic        = Topic.new(params[:topic])
+    @topic.cohort = current_user.cohort
+
     render :json => @topic.key_attrs if @topic.save
   end
 
@@ -20,6 +22,7 @@ class TopicsController < ApplicationController
     if current_user.has_votes? || params[:dir] == "down"
       @topic.vote!(params[:dir], current_user.id)
     end
+
     render :json => {topic: @topic.key_attrs, user: current_user.key_attrs}
   end
 

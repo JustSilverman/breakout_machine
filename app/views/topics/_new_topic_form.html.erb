@@ -1,12 +1,12 @@
 <%= link_to "Create Topic", "#", class: "btn btn-small border-radius", id: "show-new-topic" %>
 <div id="new-topic-form">
-  <%= form_tag topics_path do %>
+  <%= form_for Topic.new do |f| %>
     <div class="field inline">
-      <%= text_field_tag :title, nil, placeholder: "Topic description", class: "topic-form-field" %>
+      <%= f.text_field :title, placeholder: "Topic description", class: "topic-form-field" %>
     </div>
 
     <div class="actions inline">
-      <%= submit_tag "Create Topic", class: "btn btn-small border-radius new-topic-btn" %>
+      <%= f.submit "Create Topic", class: "btn btn-small border-radius new-topic-btn" %>
     </div>
   <% end %>
 </div>
