@@ -1,6 +1,6 @@
 <%= link_to "Create Topic", "#", class: "btn btn-small border-radius", id: "show-new-topic" %>
 <div id="new-topic-form">
-  <%= form_for Topic.new do |f| %>
+  <%= form_for Topic.new, :remote => true do |f| %>
     <div class="field inline">
       <%= f.text_field :title, placeholder: "Topic description", class: "topic-form-field" %>
     </div>

@@ -69,6 +69,14 @@ var table = {
       table.removeTopic(id);
       table.render();
     });
+
+    $('div#new-topic-form form').on('ajax:success', function(event, data){
+      var row = JST["templates/table"]({topics: [data]});
+      table.addTopic(new Topic(data));
+      $('.topics-table').append(row);
+      table.updateForUser();
+      table.resetForm();
+    });
   },
 
   updateUpVotes: function() {
@@ -90,17 +98,6 @@ var table = {
         this.topics[i].icon("icon-hand-down").removeClass("disabled");
       }
     }
-  },
-
-  createNewTopic: function(form) {
-    var self = this;
-    $.post(form.action, $(form).serialize()).done(function(data){
-      var row = JST["templates/table"]({topics: [data]});
-      self.addTopic(new Topic(data));
-      $('.topics-table').append(row);
-      self.updateForUser();
-    });
-    this.resetForm();
   },
 
   resetForm: function(){

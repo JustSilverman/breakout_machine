@@ -93,10 +93,6 @@ var user = {
         $('input.topic-form-field').focus();
       });
 
-      $('div#new-topic-form form').on('submit', function(e){
-        e.preventDefault();
-        table.createNewTopic(this);
-      });
     } else {
       $('div.cohort-nav').show();
       $('#show-new-topic').hide();
