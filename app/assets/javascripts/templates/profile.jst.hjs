@@ -4,4 +4,4 @@
 <span class="votes-left">
   {{open_votes}} votes left today
 </span>
-<a class="logout" href="">(log me out)</a>
+<a class="logout" href="/sessions" data-method="delete">(log me out)</a>

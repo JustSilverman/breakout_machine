@@ -19,18 +19,11 @@ var user = {
   process: function(data) {
     if (data.message) {
       $('div.small-form h4').html(data.message).addClass("error");
-      var errors = JST["templates/errors"]({errors: data.errors});
       $(".small-form ul").remove();
-      $(".small-form h4").after(errors);
+      $(".small-form h4").after(JST["templates/errors"]({errors: data.errors}));
     } else {
       user.init(data);
     }
-  },
-
-  logout: function() {
-    $.post('/sessions', {_method: "delete"}).done(function(){
-      $(location).attr('href', "/");
-    });
   },
 
   update: function(event, data) {
@@ -48,8 +41,7 @@ var user = {
   },
 
   render: function() {
-    var profile = JST["templates/profile"](this);
-    $('.right-nav').html(profile);
+    $('.right-nav').html(JST["templates/profile"](this));
   },
 
   listen: function() {
@@ -57,11 +49,6 @@ var user = {
   },
 
   setBindings: function() {
-    $('.top-nav').on('click', 'a.logout', function(e){
-      e.preventDefault();
-      user.logout();
-    });
-
     if (pageCohort && pageCohort.id == this.cohortId) {
       $('div.cohort-nav').hide();
       $('#show-new-topic').show();

@@ -62,16 +62,7 @@ Topic.prototype.dateInfo = function() {
   }
 };
 
-Topic.prototype.icon = function(icon) {
-  return $("tr[data-id='" + this.id +"']").find("span i." + icon);
-};
-
-Topic.prototype.anchor = function(icon) {
-  return this.icon(icon).parent('a');
-};
-
 Topic.prototype.upvoteBtn = function() {
-  // return this.icon("icon-hand-up").parent('a');
   return this.anchor("icon-hand-up");
 };
 
@@ -81,4 +72,12 @@ Topic.prototype.downvoteBtn = function() {
 
 Topic.prototype.completeBtn = function() {
   return this.anchor("icon-ok");
+};
+
+Topic.prototype.icon = function(icon) {
+  return $("tr[data-id='" + this.id +"']").find("span i." + icon);
+};
+
+Topic.prototype.anchor = function(icon) {
+  return this.icon(icon).parent('a');
 };
