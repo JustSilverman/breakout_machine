@@ -11,7 +11,6 @@ function Topic(data) {
 Topic.prototype.listen = function() {
   var self = this;
 
-  // Throws an Uncaught TypeError: Object #<error> has no method 'apply'
   $(self.upvoteBtn()).on('ajax:success', function(event, data){
     self.row().trigger('vote', data);
   });
@@ -36,13 +35,13 @@ Topic.prototype.render = function() {
 
 Topic.prototype.disable = function(icon) {
   this.icon(icon).addClass("disabled");
-  this.anchor(icon).on("click", false);
+  this.anchor(icon).off("click");
   this.anchor(icon).addClass("disabled");
 };
 
 Topic.prototype.enable = function(icon) {
   this.icon(icon).removeClass("disabled");
-  this.anchor(icon).on("click", true);
+  this.anchor(icon).on("click");
   this.anchor(icon).removeClass("disabled");
 };
 
