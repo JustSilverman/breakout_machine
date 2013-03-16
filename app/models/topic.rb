@@ -14,14 +14,15 @@ class Topic < ActiveRecord::Base
   before_save { self.title.titleize }
 
   def self.sort_by_votes(cohort)
-    ids = cohort ? cohort.id : Cohort.select(:id).map(&:id)
+    ids = cohort ? cohort.id : Cohort.pluck(:id)
     Topic.where(:completed => false, :cohort_id => ids).
            sort_by { |topic| 1.0 / topic.active_vote_count }
-    # self.select("topics.*, COUNT(votes.id) as votes_count").
+
+    # Topic.select("topics.*, COUNT(votes.id) as votes_count").
     #      where(:completed => false, :cohort_id => ids).
     #      joins(:votes).
     #      group('topics.id').
-    #      order('votes_count DESC')
+    #      order('votes_count DESC').joins(:cohort)
   end
 
   def self.with_json_attrs(cohort)
