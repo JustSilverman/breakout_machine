@@ -56,7 +56,7 @@ var table = {
     $('div#new-topic-form form').on('ajax:success', function(event, data){
       var newTopic = new Topic(data);
       table.addTopic(newTopic);
-      $('table.topics-table').append($(JST["templates/row"](newTopic.attrs())));
+      $('table.topics-table').append(newTopic.render());
       table.updateForUser();
       table.resetForm();
     });
@@ -66,7 +66,7 @@ var table = {
     this.sort();
     $('table.topics-table').html("");
     for (i in this.topics) {
-      $('table.topics-table').append($(JST["templates/row"](this.topics[i].attrs())));
+      $('table.topics-table').append(this.topics[i].render());
       this.topics[i].listen();
     }
     this.updateForUser();
@@ -85,25 +85,17 @@ var table = {
 
   updateUpVotes: function(topic) {
     if (this.user.hasVotes() && this.user.cohortId == topic.cohortId) {
-      topic.icon("icon-hand-up").removeClass("disabled");
-      topic.upvoteBtn().on("click", true);
-      topic.upvoteBtn().removeClass("disabled");
+      topic.enable("icon-hand-up");
     } else {
-      topic.icon("icon-hand-up").addClass("disabled");
-      topic.upvoteBtn().on("click", false);
-      topic.upvoteBtn().addClass("disabled");
+      topic.disable("icon-hand-up");
     }
   },
 
   updateDownVotes: function(topic) {
     if (!this.user.votedForTopic(topic.id)) {
-      topic.icon("icon-hand-down").addClass("disabled");
-      topic.downvoteBtn().on("click", false);
-      topic.downvoteBtn().addClass("disabled");
+      topic.disable("icon-hand-down");
     } else {
-      topic.icon("icon-hand-down").removeClass("disabled");
-      topic.downvoteBtn().on("click", true);
-      topic.downvoteBtn().removeClass("disabled");
+      topic.enable("icon-hand-down");
     }
   },
 
