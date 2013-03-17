@@ -30,7 +30,6 @@ Topic.prototype.update = function(data) {
 };
 
 Topic.prototype.render = function() {
-  debugger
   return $(JST["templates/row"](this.attrs()));
 };
 

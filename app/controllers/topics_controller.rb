@@ -20,7 +20,8 @@ class TopicsController < ApplicationController
   end
 
   def update
-    @topic.vote!(params[:dir], current_user.id)
+    # debugger
+    @topic.send(params[:operation], current_user)
 
     render :json => {topic: @topic.key_attrs, user: current_user.key_attrs}
   end

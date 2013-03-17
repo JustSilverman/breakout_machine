@@ -41,10 +41,19 @@ class Topic < ActiveRecord::Base
     Vote.where(:topic_id => self.id, :active => true)
   end
 
-  def vote!(dir, user_id)
-    user = User.find(user_id)
-    dir == UPVOTE_DIR ? upvote(user) : downvote(user)
+  def upvote!(user)
+    self.votes.create(:user => user, :active => true)
+    user.tick_votes(-1)
     update_vote_data
+  end
+
+  def downvote!(user)
+    vote = self.votes.where(:active => true).first
+    if vote
+      vote.deactivate
+      user.tick_votes(1)
+      update_vote_data
+    end
   end
 
   def key_attrs
@@ -55,19 +64,6 @@ class Topic < ActiveRecord::Base
   end
 
   private
-  def upvote(user)
-    self.votes.create(:user_id => user.id, :active => true)
-    user.tick_votes(-1)
-  end
-
-  def downvote(user)
-    vote = Vote.where(:user_id => user.id,
-                      :topic_id => self.id, :active => true).first
-    if vote
-      vote.deactivate
-      user.tick_votes(1)
-    end
-  end
 
   def update_vote_data
     last_upvote = Vote.where(:topic_id => self.id, :active => true).

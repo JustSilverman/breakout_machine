@@ -10,17 +10,17 @@
   </td>
   <td class="vote-count">{{votes}} votes</td>
   <td class="btn-col">
-    <span class="vote upvote" data-dir="up">
-      <a href="/topics/{{id}}?dir=up" class="icon" data-remote="true" data-method="put">
+    <span class="vote upvote">
+      <a href="/topics/{{id}}?operation=upvote!" class="icon" data-remote="true" data-method="put">
         <i class="icon-hand-up icon-2x icon-btn"></i>
       </a>
     </span>
-    <span class="vote downvote" data-dir="down">
-      <a href="/topics/{{id}}?dir=down" class="icon" data-remote="true" data-method="put">
+    <span class="vote downvote">
+      <a href="/topics/{{id}}?operation=downvote!" class="icon" data-remote="true" data-method="put">
         <i class="icon-hand-down icon-2x icon-btn"></i>
       </a>
     </span>
-    <span class="complete" data-dir="up">
+    <span class="complete">
       <a href="/topics/complete/{{id}}" class="icon" data-remote="true" data-method="put">
         <i class="icon-ok icon-2x icon-btn disabled"></i>
       </a>

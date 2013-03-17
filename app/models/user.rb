@@ -18,16 +18,7 @@ class User < ActiveRecord::Base
   validates :password_confirmation, presence: true
 
   before_create :default_values
-
   before_save {self.email.downcase!}
-
-  def first_name
-    self.name.split(" ").first
-  end
-
-  def last_name
-    self.name.split(" ").last
-  end
 
   def has_votes?
     self.open_votes != 0
