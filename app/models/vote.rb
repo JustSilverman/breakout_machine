@@ -1,5 +1,5 @@
 class Vote < ActiveRecord::Base
-  attr_accessible :topic_id, :active, :user
+  attr_accessible :active, :user, :topic
 
   belongs_to :user
   belongs_to :topic

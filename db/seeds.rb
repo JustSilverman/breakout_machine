@@ -24,5 +24,5 @@ all_topics = Topic.all
 all_users  = User.all
 
 25.times do
-  all_topics.sample.vote!("up", all_users.sample.id)
+  all_users.sample.send([:upvote!, :downvote!].sample, all_topics.sample)
 end

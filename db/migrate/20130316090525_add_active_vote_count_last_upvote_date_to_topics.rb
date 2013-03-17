@@ -4,7 +4,7 @@ class AddActiveVoteCountLastUpvoteDateToTopics < ActiveRecord::Migration
     add_column :topics, :last_upvote_date,  :datetime
 
     Topic.all.each do |topic|
-      last_upvote = Vote.where(:topic_id => topic.id, :active => true).
+      last_upvote = Vote.where(:topic => topic, :active => true).
                         order(:updated_at).limit(1).first
       upvote_date = last_upvote ? last_upvote.created_at : nil
 

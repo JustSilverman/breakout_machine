@@ -16,12 +16,7 @@ class Topic < ActiveRecord::Base
   def self.sort_by_votes(cohort)
     ids = cohort ? cohort.id : Cohort.pluck(:id)
 
-    Topic.where("active_vote_count = ?", 0) +
-    Topic.select("topics.*, COUNT(votes.id) as votes_count").
-          where(:completed => false, :cohort_id => ids).
-          joins(:votes).
-          group('topics.id').
-          order('votes_count DESC').
+    Topic.where(:completed => false, :cohort_id => ids).
           includes(:cohort)
   end
 
@@ -38,22 +33,15 @@ class Topic < ActiveRecord::Base
   end
 
   def active_votes
-    Vote.where(:topic_id => self.id, :active => true)
+    self.votes.where(:active => true)
   end
 
-  def upvote!(user)
-    self.votes.create(:user => user, :active => true)
-    user.tick_votes(-1)
-    update_vote_data
-  end
+  def update_vote_data
+    last_upvote = self.votes.where(:active => true).order(:updated_at).limit(1).first
+    upvote_date = last_upvote ? last_upvote.created_at : nil
 
-  def downvote!(user)
-    vote = self.votes.where(:active => true).first
-    if vote
-      vote.deactivate
-      user.tick_votes(1)
-      update_vote_data
-    end
+    self.update_attributes(:active_vote_count => self.active_votes.size,
+                           :last_upvote_date  => upvote_date)
   end
 
   def key_attrs
@@ -64,16 +52,6 @@ class Topic < ActiveRecord::Base
   end
 
   private
-
-  def update_vote_data
-    last_upvote = Vote.where(:topic_id => self.id, :active => true).
-                        order(:updated_at).limit(1).first
-    upvote_date = last_upvote ? last_upvote.created_at : nil
-
-    self.update_attributes(:active_vote_count => self.active_votes.size,
-                           :last_upvote_date  => upvote_date)
-  end
-
   def clean_upvote_date
     self.last_upvote_date.strftime("%m-%d-%Y") if self.last_upvote_date
   end

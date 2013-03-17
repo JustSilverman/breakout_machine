@@ -28,9 +28,23 @@ class User < ActiveRecord::Base
     self.update_attribute(:open_votes, 3) if stale?
   end
 
+  def upvote!(topic)
+    self.votes.create(:topic => topic, :active => true)
+    tick_votes(-1)
+    topic.update_vote_data
+  end
+
+  def downvote!(topic)
+    vote = self.votes.where(:topic_id => topic.id, :active => true).first
+    if vote
+      vote.deactivate
+      tick_votes(1)
+      topic.update_vote_data
+    end
+  end
+
   def tick_votes(int)
-    new_votes = self.open_votes + int
-    self.update_attribute(:open_votes, new_votes)
+    self.update_attribute(:open_votes, self.open_votes + int)
   end
 
   def key_attrs

@@ -1,7 +1,6 @@
 class TopicsController < ApplicationController
   before_filter :find_topic,   :only => [:update, :complete]
   before_filter :find_cohort,  :only => [:index]
-  # respond_to :json, :html
 
   def index
     @topics = Topic.with_json_attrs(@cohort)
@@ -20,8 +19,7 @@ class TopicsController < ApplicationController
   end
 
   def update
-    # debugger
-    @topic.send(params[:operation], current_user)
+    current_user.send(params[:operation], @topic)
 
     render :json => {topic: @topic.key_attrs, user: current_user.key_attrs}
   end
