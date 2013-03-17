@@ -4,12 +4,7 @@
     <span class="row-small">
       {{cohortName}}
       <span class="date-info">
-        {{#if lastVote}}
-          (created on {{createdAt}}
-            | last upvote {{lastVote}})
-        {{else}}
-          (created on {{createdAt}})
-        {{/if}}
+        {{dateInfo}}
       </span>
     </span>
   </td>

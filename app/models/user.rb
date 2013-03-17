@@ -5,18 +5,18 @@ class User < ActiveRecord::Base
   has_many :topics, :through => :votes
 
   attr_accessible :name, :email, :password,
-                  :password_confirmation, :cohort_id
+                  :password_confirmation, :cohort, :cohort_id
   has_secure_password
 
   validates_confirmation_of :password
   validates :cohort_id, presence: true
   validates :name, presence: true, length: { maximum: 35 }
-
   validates :email, presence:   true,
                     format:     { with: VALID_EMAIL_REGEX },
                     uniqueness: { case_sensitive: false }
   validates :password, presence: true, length: { minimum: 6 }
   validates :password_confirmation, presence: true
+
   before_create :default_values
 
   before_save {self.email.downcase!}
@@ -33,18 +33,13 @@ class User < ActiveRecord::Base
     self.open_votes != 0
   end
 
-  def decrement_votes
-    self.update_attribute(:open_votes, self.open_votes -= 1)
-  end
-
-  def increment_votes
-    self.update_attribute(:open_votes, self.open_votes += 1)
-  end
-
   def refresh_votes
-    if self.votes.count == 0 || last_vote_date > 12.hours.ago
-      self.update_attribute(:open_votes, 3)
-    end
+    self.update_attribute(:open_votes, 3) if stale?
+  end
+
+  def tick_votes(int)
+    new_votes = self.open_votes + int
+    self.update_attribute(:open_votes, new_votes)
   end
 
   def key_attrs
@@ -67,12 +62,14 @@ class User < ActiveRecord::Base
   end
 
   def active_ids
-    Vote.select(:topic_id).
-         where(:user_id => self.id, :active => true).
-         map {|topic| topic.topic_id }
+    self.votes.where(:active => true).pluck(:topic_id)
   end
 
   def last_vote_date
-    Vote.where(:user_id => self.id).order("created_at DESC").first.updated_at
+    self.votes.order("created_at DESC").first.updated_at
+  end
+
+  def stale?
+    self.votes.count == 0 || last_vote_date > 12.hours.ago
   end
 end
