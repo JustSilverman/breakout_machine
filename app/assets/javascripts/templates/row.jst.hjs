@@ -1,4 +1,4 @@
-<tr class="topic-row" data-id="{{id}}">
+<tr class="topic-row" data-id="{{id}}" >
   <td>
     {{title}}
     <span class="row-small">

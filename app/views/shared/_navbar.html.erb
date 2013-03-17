@@ -1,13 +1,15 @@
 <div class="top-nav">
   <a href="/"><h1 class="navbar-title">Breakout Machine</h1></a>
   <div class="sub-nav">
-    <%= link_to "Lions", cohort_topics_path(:cohort_name => "sea_lions"),
-        class: "sub-nav-link" %>
-    <%= link_to "Slugs", cohort_topics_path(:cohort_name => "banana_slugs"),
-        class: "sub-nav-link" %>
-    <%= link_to "Bears", cohort_topics_path(:cohort_name => "golden_bears"),
-        class: "sub-nav-link" %>
-    <%= link_to "All", topics_path, class: "sub-nav-link" %>
+    <div class="center-links">
+      <%= link_to "Lions", cohort_topics_path(:cohort_name => "sea_lions"),
+          class: "sub-nav-link"  %>
+      <%= link_to "Slugs", cohort_topics_path(:cohort_name => "banana_slugs"),
+          class: "sub-nav-link" %>
+      <%= link_to "Bears", cohort_topics_path(:cohort_name => "golden_bears"),
+          class: "sub-nav-link" %>
+      <%= link_to "All", topics_path, class: "sub-nav-link" %>
+    </div>
   </div>
 
   <div class="right-nav">
