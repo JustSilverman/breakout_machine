@@ -30,7 +30,7 @@ Topic.prototype.update = function(data) {
 };
 
 Topic.prototype.render = function() {
-  return $(JST["templates/row"](this.attrs()));
+  return JST["templates/row"](this.attrs());
 };
 
 Topic.prototype.disable = function(icon) {

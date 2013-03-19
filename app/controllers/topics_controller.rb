@@ -1,14 +1,12 @@
 class TopicsController < ApplicationController
   before_filter :find_topic,   :only => [:update, :complete]
   before_filter :find_cohort,  :only => [:index]
+  respond_to :json, :html
 
   def index
     @topics = Topic.with_json_attrs(@cohort)
 
-    respond_to do |format|
-      format.html
-      format.json { render :json => {:topics => @topics} }
-    end
+    respond_with(@topics)
   end
 
   def create

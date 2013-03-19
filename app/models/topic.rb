@@ -1,7 +1,4 @@
 class Topic < ActiveRecord::Base
-  UPVOTE_DIR   = "up"
-  DOWNVOTE_DIR = "down"
-
   belongs_to :cohort
   has_many :votes, :autosave => true
   has_many :users, :through => :votes

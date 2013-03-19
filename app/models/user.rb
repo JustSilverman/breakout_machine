@@ -1,21 +1,21 @@
 class User < ActiveRecord::Base
   VALID_EMAIL_REGEX = /\A[\w+\-.]+@[a-z\d\-.]+\.[a-z]+\z/i
   belongs_to :cohort
-  has_many :votes
-  has_many :topics, :through => :votes
+  has_many   :votes
+  has_many   :topics, :through => :votes
 
   attr_accessible :name, :email, :password,
                   :password_confirmation, :cohort, :cohort_id
-  has_secure_password
 
   validates_confirmation_of :password
   validates :cohort_id, presence: true
-  validates :name, presence: true, length: { maximum: 35 }
-  validates :email, presence:   true,
-                    format:     { with: VALID_EMAIL_REGEX },
-                    uniqueness: { case_sensitive: false }
-  validates :password, presence: true, length: { minimum: 6 }
+  validates :name,      presence: true, length: { maximum: 35 }
+  validates :email,     presence: true,
+                        format:     { with: VALID_EMAIL_REGEX },
+                        uniqueness: { case_sensitive: false }
+  validates :password,  presence: true, length: { minimum: 6 }
   validates :password_confirmation, presence: true
+  has_secure_password
 
   before_create :default_values
   before_save {self.email.downcase!}
@@ -70,11 +70,11 @@ class User < ActiveRecord::Base
     self.votes.where(:active => true).pluck(:topic_id)
   end
 
-  def last_vote_date
-    self.votes.order("created_at DESC").first.updated_at
+  def last_vote
+    self.votes.order("created_at DESC").limit(1).first
   end
 
   def stale?
-    self.votes.count == 0 || last_vote_date > 12.hours.ago
+    last_vote.nil? || last_vote.created_at > 12.hours.ago
   end
 end

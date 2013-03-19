@@ -56,7 +56,7 @@ var table = {
     $('div#new-topic-form form').on('ajax:success', function(event, data){
       var newTopic = new Topic(data);
       table.addTopic(newTopic);
-      $('table.topics-table').append(newTopic.render());
+      table.render();
       table.updateForUser();
       table.resetForm();
     });

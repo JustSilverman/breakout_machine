@@ -5,6 +5,7 @@ $(document).ready(function(){
   } else {
     bindEntryForms();
   }
+
   table.init(user, topics);
 
   window.setInterval(poll, 5000);
@@ -40,6 +41,6 @@ function bindEntryForms() {
 
 function poll() {
   $.getJSON(location.pathname).done(function(data){
-    table.refresh(user, data.topics);
+    table.refresh(user, data);
   });
 };
