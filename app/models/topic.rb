@@ -50,6 +50,6 @@ class Topic < ActiveRecord::Base
 
   private
   def clean_upvote_date
-    self.last_upvote_date.strftime("%m-%d-%Y") if self.last_upvote_date
+    Date.parse(self.last_upvote_date).strftime("%m-%d-%Y") if self.last_upvote_date
   end
 end
