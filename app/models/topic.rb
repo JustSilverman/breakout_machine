@@ -43,7 +43,7 @@ class Topic < ActiveRecord::Base
 
   def key_attrs
     {id: self.id, title: self.title, votes: self.active_vote_count,
-     createdAt: self.created_at.strtime("%m-%d-%Y"),
+     createdAt: self.created_at.strftime("%m-%d-%Y"),
      lastVote: clean_upvote_date, cohortId: self.cohort_id,
      cohortName: self.cohort.name}
   end
