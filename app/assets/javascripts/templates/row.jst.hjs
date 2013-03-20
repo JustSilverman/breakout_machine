@@ -21,7 +21,7 @@
       </a>
     </span>
     <span class="complete">
-      <a href="/topics/complete/{{id}}" class="icon" data-remote="true" data-method="put">
+      <a href="/topics/complete/{{id}}" class="icon disabled" data-remote="true" data-method="put">
         <i class="icon-ok icon-2x icon-btn disabled"></i>
       </a>
     </span>

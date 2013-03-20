@@ -71,7 +71,7 @@ class User < ActiveRecord::Base
   end
 
   def last_vote
-    self.votes.order("created_at DESC").limit(1).first
+    votes.most_recent
   end
 
   def stale?

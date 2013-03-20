@@ -56,6 +56,7 @@ var table = {
     $('div#new-topic-form form').on('ajax:success', function(event, data){
       var newTopic = new Topic(data);
       table.addTopic(newTopic);
+      console.log("hello")
       table.render();
       table.updateForUser();
       table.resetForm();
@@ -101,7 +102,8 @@ var table = {
 
   updateComplete: function() {
     if (this.user.isTeacher()) {
-      $('span i.icon-ok').removeClass("disabled");
+      $('span.complete i.icon-ok').removeClass("disabled").on("click");
+      $('span.complete a').removeClass("disabled").on("click");
     };
   },
 
