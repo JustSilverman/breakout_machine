@@ -75,6 +75,6 @@ class User < ActiveRecord::Base
   end
 
   def stale?
-    last_vote.nil? || last_vote.created_at > 12.hours.ago
+    last_vote.nil? || last_vote.created_at < 12.hours.ago
   end
 end
