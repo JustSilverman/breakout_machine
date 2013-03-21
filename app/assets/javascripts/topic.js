@@ -14,6 +14,7 @@ Topic.prototype.listen = function() {
   $(self.upvoteBtn()).on('ajax:success', function(event, data){
     self.row().trigger('vote', data);
   });
+
   $(self.downvoteBtn()).on('ajax:success', function(event, data){
     self.row().trigger('vote', data);
   });

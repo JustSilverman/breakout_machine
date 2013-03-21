@@ -3,15 +3,15 @@ var table = {
   user: null,
 
   init: function(user, topics) {
-    this.user = user;
-    this.load(topics);
+    this.refresh(user, topics);
     this.listen();
-    table.render(user);
   },
 
   refresh: function(user, topics){
-    this.topics = [];
-    this.init(user, topics);
+    this.topics = []
+    this.user = user;
+    this.load(topics);
+    this.render(user);
   },
 
   load: function(topics) {
@@ -47,6 +47,7 @@ var table = {
       table.removeTopic(id);
       table.render();
     });
+
 
     $('table').on('vote', 'tr', function(event, data){
       table.findTopicById(data.topic.id).update(data.topic)
