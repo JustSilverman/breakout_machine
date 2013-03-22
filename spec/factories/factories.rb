@@ -4,6 +4,7 @@ FactoryGirl.define do
     sequence(:email)       { |n| "Person@example#{n}.com"}
     password               "foobar"
     password_confirmation  "foobar"
+    cohort
   end
 
   factory :topic do
@@ -13,5 +14,9 @@ FactoryGirl.define do
   factory :vote do
     user
     topic
+  end
+
+  factory :cohort do
+    name                  "Cohort name"
   end
 end
