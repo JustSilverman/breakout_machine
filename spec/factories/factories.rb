@@ -4,7 +4,14 @@ FactoryGirl.define do
     sequence(:email)       { |n| "Person@example#{n}.com"}
     password               "foobar"
     password_confirmation  "foobar"
+    open_votes             3
     cohort
+
+    factory :user_without_votes do
+      after(:create) do |user|
+        user.open_votes = 0
+      end
+    end
   end
 
   factory :topic do
