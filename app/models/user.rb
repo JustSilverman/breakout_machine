@@ -23,9 +23,9 @@ class User < ActiveRecord::Base
     open_votes != 0
   end
 
-#   def refresh_votes
-#     self.update_attribute(:open_votes, 3) if stale?
-#   end
+  def refresh_votes
+    self.update_attribute(:open_votes, 3) if stale?
+  end
 
   def upvote!(topic)
     raise Exceptions::NoOpenVotesError unless open_votes > 0
@@ -34,14 +34,14 @@ class User < ActiveRecord::Base
     topic.update_vote_data
   end
 
-#   def downvote!(topic)
-#     vote = self.votes.where(:topic_id => topic.id, :active => true).first
-#     if vote
-#       vote.deactivate
-#       tick_votes(1)
-#       topic.update_vote_data
-#     end
-#   end
+  def downvote!(topic)
+    vote = votes.active.by_topic(topic).first
+    if vote
+      vote.deactivate!
+      tick_votes(1)
+      topic.update_vote_data
+    end
+  end
 
   def tick_votes(int)
     raise Exceptions::NoOpenVotesError unless open_votes + int >= 0
@@ -71,11 +71,11 @@ class User < ActiveRecord::Base
     votes.active.pluck(:topic_id)
   end
 
-#   def last_vote
-#     votes.most_recent
-#   end
+  def last_vote
+    votes.most_recent
+  end
 
-#   def stale?
-#     last_vote.nil? || last_vote.created_at < Time.zone.now.to_date.beginning_of_day
-#   end
+  def stale?
+    last_vote.nil? || last_vote.created_at < Time.zone.now.to_date.beginning_of_day
+  end
 end

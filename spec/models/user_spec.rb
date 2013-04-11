@@ -204,4 +204,46 @@ describe User do
       }.to change(topic, :active_vote_count).by(1)
     end
   end
+
+  context '#downvote!' do
+    let(:topic) { create(:topic) }
+
+    it 'requires one topic as an argument' do
+      expect {
+        user.downvote!
+      }.to raise_error(ArgumentError)
+    end
+
+    it 'returns nil if a user did not previously vote for the topic' do
+      user.downvote!(topic).should be_nil
+    end
+
+    context 'when a user has already voted for the topic' do
+      before { user.upvote!(topic) }
+      it "increases a user's open_votes by 1" do
+        expect {
+          user.downvote!(topic)
+        }.to change(user, :open_votes).by(1)
+      end
+
+      it "updates the topic's upvote date" do
+        expect {
+          user.downvote!(topic)
+        }.to change(topic, :last_upvote_date)
+      end
+
+      it "updates the topic's active vote count" do
+        expect {
+          user.downvote!(topic)
+        }.to change(topic, :active_vote_count).by(-1)
+      end
+
+      it "deactivates the vote" do
+        vote = topic.votes.by_user(user).first
+        expect {
+          user.downvote!(topic)
+        }.to change{vote.reload.active}.to(false)
+      end
+    end
+  end
 end

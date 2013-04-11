@@ -4,20 +4,29 @@ class Vote < ActiveRecord::Base
   belongs_to :user
   belongs_to :topic
 
-
-  def deactivate
-    self.update_attributes(:active => false)
+  def deactivate!
+    update_attribute(:active, false)
   end
 
-  def self.active
-    where(:active => true)
-  end
+  class << self
+    def active
+      where(:active => true)
+    end
 
-  def self.most_recent
-    order('created_at DESC').limit(1).first
-  end
+    def by_topic(topic)
+      where(:topic_id => topic.id)
+    end
 
-  def self.active_topic_ids
-    self.active.topic_ids
+    def by_user(user)
+      where(:user_id => user.id)
+    end
+
+    def most_recent
+      order('created_at DESC').limit(1).first
+    end
+
+    def active_topic_ids
+      active.topic_ids
+    end
   end
 end
