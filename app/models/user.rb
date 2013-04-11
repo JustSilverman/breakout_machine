@@ -1,5 +1,5 @@
 class User < ActiveRecord::Base
-  VALID_EMAIL_REGEX = /\A[\w+\-.]+@[a-z\d\-.]+\.[a-z]+\z/i
+  VALID_EMAIL_REGEX = /.+@.+\..+/
   belongs_to :cohort
   has_many   :votes
   has_many   :topics, :through => :votes
@@ -7,8 +7,7 @@ class User < ActiveRecord::Base
   attr_accessible :name, :email, :password,
                   :password_confirmation, :cohort, :cohort_id
 
-  validates_confirmation_of :password
-  validates :cohort_id, presence: true
+  validates :cohort, presence: true
   validates :name,      presence: true, length: { maximum: 35 }
   validates :email,     presence: true,
                         format:     { with: VALID_EMAIL_REGEX },
@@ -21,7 +20,7 @@ class User < ActiveRecord::Base
   before_save {self.email.downcase!}
 
   def has_votes?
-    self.open_votes != 0
+    open_votes != 0
   end
 
   def refresh_votes
@@ -29,27 +28,29 @@ class User < ActiveRecord::Base
   end
 
   def upvote!(topic)
+    raise Exceptions::NoOpenVotesError unless open_votes > 0
     self.votes.create(:topic => topic, :active => true)
     tick_votes(-1)
     topic.update_vote_data
   end
 
   def downvote!(topic)
-    vote = self.votes.where(:topic_id => topic.id, :active => true).first
+    vote = votes.active.by_topic(topic).first
     if vote
-      vote.deactivate
+      vote.deactivate!
       tick_votes(1)
       topic.update_vote_data
     end
   end
 
   def tick_votes(int)
-    self.update_attribute(:open_votes, self.open_votes + int)
+    raise Exceptions::NoOpenVotesError unless open_votes + int >= 0
+    update_attribute(:open_votes, open_votes + int)
   end
 
   def key_attrs
-    {name: self.name, open_votes: self.open_votes, topicIds: active_ids,
-     group: self.group, cohortId: self.cohort_id}
+    {name: name, open_votes: open_votes, topicIds: active_ids,
+     group: group, cohortId: cohort_id}
   end
 
   def to_json
@@ -67,7 +68,7 @@ class User < ActiveRecord::Base
   end
 
   def active_ids
-    self.votes.where(:active => true).pluck(:topic_id)
+    votes.active.pluck(:topic_id)
   end
 
   def last_vote
